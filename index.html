@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decision Matrix</title>
+    <!-- CSS only -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="display-2 mb-5">Decision Matrix</div>
+
+      <div class="row">
+        <!-- SIDEBAR -->
+        <div class="col-lg-3">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title d-inline">
+                Items à comparer
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <ul id="itemsAdded" class="list-group list-group-flush"></ul>
+                  <div class="input-group mt-3">
+                    <input
+                      id="itemAddInput"
+                      type="text"
+                      class="form-control"
+                      placeholder="Ajouter un item à comparer"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary"
+                        type="button"
+                        id="itemAddButton"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title">
+                Propriétés à comparer
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <ul id="propAdded" class="list-group list-group-flush"></ul>
+                  <div class="input-group mt-3">
+                    <input
+                      id="propAddInput"
+                      type="text"
+                      class="form-control"
+                      placeholder="Ajouter une propriété à comparer"
+                    />
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-outline-primary"
+                        type="button"
+                        id="propAddButton"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- SIDEBAR END -->
+        <!-- MAIN -->
+        <div class="col-lg-5">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title">Item 1 à comparer</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-8">Cras justo odio</div>
+                  <div class="col-md-4">
+                    <div
+                      class="btn-group btn-group-toggle"
+                      data-toggle="buttons"
+                    >
+                      <label class="btn btn-sm btn-secondary">
+                        <input
+                          type="radio"
+                          name="options"
+                          id="option1"
+                          checked
+                        />
+                        Active
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option2" />
+                        Radio
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option3" />
+                        Radio
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-8">Cras justo odio</div>
+                  <div class="col-md-4">
+                    <div
+                      class="btn-group btn-group-toggle"
+                      data-toggle="buttons"
+                    >
+                      <label class="btn btn-sm btn-secondary">
+                        <input
+                          type="radio"
+                          name="options"
+                          id="option1"
+                          checked
+                        />
+                        Active
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option2" />
+                        Radio
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option3" />
+                        Radio
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-md-8">Cras justo odio</div>
+                  <div class="col-md-4">
+                    <div
+                      class="btn-group btn-group-toggle"
+                      data-toggle="buttons"
+                    >
+                      <label class="btn btn-sm btn-secondary">
+                        <input
+                          type="radio"
+                          name="options"
+                          id="option1"
+                          checked
+                        />
+                        Active
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option2" />
+                        Radio
+                      </label>
+                      <label class="btn btn-sm btn-secondary">
+                        <input type="radio" name="options" id="option3" />
+                        Radio
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="app.js"></script>
+  </body>
+</html>
