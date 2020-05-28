@@ -11,14 +11,15 @@ function randColor() {
  * Represent an item to compare
  * @constructor
  * @param {string} content - content
+ * @param {object} param - property to compare
  */
 class Item {
-  constructor(content) {
+  constructor(content, props) {
     this.id = Item.getId();
     this.content = content;
     this.color = randColor();
     this.isSure = true;
-    this.props = "";
+    this.props = props;
   }
 
   static inc = 0;
@@ -41,7 +42,7 @@ itemAddInput.value = "";
 
 itemAddButton.addEventListener("click", function () {
   if (itemAddInput.value !== "") {
-    items.push(new Item(itemAddInput.value));
+    items.push(new Item(itemAddInput.value, props));
     itemAddInput.value = "";
     let allItems = "";
     items.map((item) => {
