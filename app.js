@@ -105,6 +105,7 @@ document.body.addEventListener("click", function (e) {
       </li>`;
       });
       ItemsAdded.innerHTML = allItems;
+      updateCompare();
     } else return;
   } else if (e.target === propAddButton) {
     if (propAddInput.value !== "") {
@@ -116,13 +117,13 @@ document.body.addEventListener("click", function (e) {
       <li class="list-group-item">${prop.content}</li>`;
       });
       propAdded.innerHTML = allProps;
+      updateCompare();
     } else return;
   } else return;
 });
 
-document.addEventListener("change", function () {
+function updateCompare() {
   let blockCompare = document.getElementById("blockCompare");
-
   let allCompareProps = "";
   props.map((prop) => {
     allCompareProps += `
@@ -175,7 +176,7 @@ document.addEventListener("change", function () {
   });
 
   blockCompare.innerHTML = allCompareItems;
-});
+}
 
 let allCompareList = document.getElementById("allCompareList");
 let allCompareTitle = document.getElementById("allCompareTitle");
