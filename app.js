@@ -140,17 +140,16 @@ function updateCompare() {
                           type="radio"
                           name="options"
                           id="option1"
-                          checked
                         />
-                        Active
+                        20%
                       </label>
                       <label class="btn btn-sm btn-secondary">
                         <input type="radio" name="options" id="option2" />
-                        Radio
+                        70%
                       </label>
                       <label class="btn btn-sm btn-secondary">
                         <input type="radio" name="options" id="option3" />
-                        Radio
+                        100%
                       </label>
                     </div>
                   </div>
@@ -177,6 +176,3 @@ function updateCompare() {
 
   blockCompare.innerHTML = allCompareItems;
 }
-
-let allCompareList = document.getElementById("allCompareList");
-let allCompareTitle = document.getElementById("allCompareTitle");
