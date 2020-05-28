@@ -8,14 +8,27 @@ function randColor() {
 }
 
 /**
+ * Represent an item to compare
+ * @constructor
  * @param {string} content - content
  */
 class Item {
   constructor(content) {
-    this.id = Math.floor(Math.random() * 100);
+    this.id = Item.getId();
     this.content = content;
     this.color = randColor();
     this.isSure = true;
+    this.props = "";
+  }
+
+  static inc = 0;
+
+  /**
+   * Generate number id
+   * @return {int} the id
+   */
+  static getId() {
+    return Item.inc++;
   }
 }
 
@@ -46,14 +59,26 @@ itemAddButton.addEventListener("click", function () {
 });
 
 /**
+ * Represent a property to compare
+ * @constructor
  * @param {string} content - content
  */
 class Prop {
   constructor(content) {
-    this.id = Math.floor(Math.random() * 100);
+    this.id = Prop.getId();
     this.content = content;
     this.color = randColor();
     this.isSure = true;
+  }
+
+  static inc = 0;
+
+  /**
+   * Generate number id
+   * @return {int} the id
+   */
+  static getId() {
+    return Prop.inc++;
   }
 }
 
