@@ -69,6 +69,7 @@ class Prop {
     this.content = content;
     this.color = randColor();
     this.isSure = true;
+    this.fit = 0;
   }
 
   static inc = 0;
@@ -79,6 +80,14 @@ class Prop {
    */
   static getId() {
     return Prop.inc++;
+  }
+
+  setFit(fit) {
+    if (!isNaN(fit)) {
+      if (fit < 0 && fit > 3) {
+        this.fit = fit;
+      } else return;
+    } else return;
   }
 }
 
