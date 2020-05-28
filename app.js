@@ -1,12 +1,3 @@
-function randColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
 /**
  * Represent an item to compare
  * @constructor
@@ -17,7 +8,7 @@ class Item {
   constructor(content, props) {
     this.id = Item.getId();
     this.content = content;
-    this.color = randColor();
+    this.color = this.randColor();
     this.isSure = true;
     this.props = props;
   }
@@ -30,6 +21,14 @@ class Item {
    */
   static getId() {
     return Item.inc++;
+  }
+  randColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 }
 
@@ -68,7 +67,7 @@ class Prop {
   constructor(content) {
     this.id = Prop.getId();
     this.content = content;
-    this.color = randColor();
+    this.color = this.randColor();
     this.isSure = true;
     this.fit = 0;
   }
@@ -89,6 +88,15 @@ class Prop {
         this.fit = fit;
       } else return;
     } else return;
+  }
+
+  randColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 }
 
