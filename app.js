@@ -13,8 +13,6 @@ class Item {
     this.props = props;
   }
 
-  static inc = 0;
-
   /**
    * Generate number id
    * @return {int} the id
@@ -47,14 +45,12 @@ class Prop {
     this.fit = 0;
   }
 
-  static inc = 0;
-
   /**
    * Generate number id
    * @return {int} the id
    */
   static getId() {
-    return Prop.inc++;
+    return Date.now();
   }
 
   setFit(fit) {
@@ -92,32 +88,34 @@ propAddInput.value = "";
 document.body.addEventListener("click", function (e) {
   if (e.target === itemAddButton) {
     if (itemAddInput.value !== "") {
-      items.push(new Item(itemAddInput.value, props));
+      let item = new Item(itemAddInput.value, props);
+      items.push(item);
+      ItemsAdded.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li class="list-group-item">
+          <span class="items">${item.content} </span>
+          <div class="ml-5 d-inline form-group form-check" >
+            <input type="checkbox" data-id="${item.id}" class="form-check-input" id="${item.content}" />
+            <label class="form-check-label" for="${item.content}"><small>?</small></label>
+          </div>
+        </li>
+        `
+      );
       itemAddInput.value = "";
-      let allItems = "";
-      items.map((item) => {
-        allItems += `
-      <li class="list-group-item">
-        <span class="items">${item.content} </span>
-        <div class="ml-5 d-inline form-group form-check" >
-          <input type="checkbox" data-id="${item.id}" class="form-check-input" id="${item.content}" />
-          <label class="form-check-label" for="${item.content}"><small>?</small></label>
-        </div>
-      </li>`;
-      });
-      ItemsAdded.innerHTML = allItems;
       updateCompare();
     } else return;
   } else if (e.target === propAddButton) {
     if (propAddInput.value !== "") {
-      props.push(new Prop(propAddInput.value));
+      let prop = new Prop(propAddInput.value);
+      props.push(prop);
+      propAdded.insertAdjacentHTML(
+        "beforeend",
+        `
+        <li class="list-group-item">${prop.content}</li>
+        `
+      );
       propAddInput.value = "";
-      let allProps = "";
-      props.map((prop) => {
-        allProps += `
-      <li class="list-group-item">${prop.content}</li>`;
-      });
-      propAdded.innerHTML = allProps;
       updateCompare();
     } else return;
   }
@@ -160,9 +158,7 @@ function updateCompare() {
 
   blockCompare.innerHTML = allCompareItems;
 }
-
-let rankList = document.getElementsByClassName("rankList");
-
+let rankList = document.querySelectorAll(".rankList");
 document.body.addEventListener("change", function (e) {
   for (let i = 0; i < rankList.length; i++) {
     items.forEach(function (item) {
