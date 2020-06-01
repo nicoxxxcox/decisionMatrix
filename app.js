@@ -81,6 +81,8 @@ const propAddInput = document.getElementById("propAddInput");
 const propAddButton = document.getElementById("propAddButton");
 const propAdded = document.getElementById("propAdded");
 
+let rankList = document.querySelectorAll(".rankList");
+
 // initialize inputs to 0
 itemAddInput.value = "";
 propAddInput.value = "";
@@ -118,8 +120,7 @@ document.body.addEventListener("click", function (e) {
       propAddInput.value = "";
       updateCompare();
     } else return;
-  }
-  if (e.target === rankList) {
+  } else if (e.target === rankList) {
     console.log(rankList);
   } else return;
 });
@@ -158,13 +159,3 @@ function updateCompare() {
 
   blockCompare.innerHTML = allCompareItems;
 }
-let rankList = document.querySelectorAll(".rankList");
-document.body.addEventListener("change", function (e) {
-  for (let i = 0; i < rankList.length; i++) {
-    items.forEach(function (item) {
-      for (let j = 0; j < props.length; j++) {
-        item.props[j].fit = rankList[i].value;
-      }
-    });
-  }
-});
