@@ -71,30 +71,29 @@ class Prop {
   }
 }
 
-let items = [];
-const itemAddInput = document.getElementById("itemAddInput");
-const itemAddButton = document.getElementById("itemAddButton");
-const ItemsAdded = document.getElementById("itemsAdded");
+let main = function () {
+  let items = [];
+  const itemAddInput = document.getElementById("itemAddInput");
+  const itemAddButton = document.getElementById("itemAddButton");
+  const ItemsAdded = document.getElementById("itemsAdded");
 
-let props = [];
-const propAddInput = document.getElementById("propAddInput");
-const propAddButton = document.getElementById("propAddButton");
-const propAdded = document.getElementById("propAdded");
+  let props = [];
+  const propAddInput = document.getElementById("propAddInput");
+  const propAddButton = document.getElementById("propAddButton");
+  const propAdded = document.getElementById("propAdded");
 
-let rankList = document.querySelectorAll(".rankList");
+  // initialize inputs to 0
+  itemAddInput.value = "";
+  propAddInput.value = "";
 
-// initialize inputs to 0
-itemAddInput.value = "";
-propAddInput.value = "";
-
-document.body.addEventListener("click", function (e) {
-  if (e.target === itemAddButton) {
-    if (itemAddInput.value !== "") {
-      let item = new Item(itemAddInput.value, props);
-      items.push(item);
-      ItemsAdded.insertAdjacentHTML(
-        "beforeend",
-        `
+  document.body.addEventListener("click", function (e) {
+    if (e.target === itemAddButton) {
+      if (itemAddInput.value !== "") {
+        let item = new Item(itemAddInput.value, props);
+        items.push(item);
+        ItemsAdded.insertAdjacentHTML(
+          "beforeend",
+          `
         <li class="list-group-item">
           <span class="items">${item.content} </span>
           <div class="ml-5 d-inline form-group form-check" >
@@ -103,51 +102,45 @@ document.body.addEventListener("click", function (e) {
           </div>
         </li>
         `
-      );
-      itemAddInput.value = "";
-      updateCompare();
-    } else return;
-  } else if (e.target === propAddButton) {
-    if (propAddInput.value !== "") {
-      let prop = new Prop(propAddInput.value);
-      props.push(prop);
-      propAdded.insertAdjacentHTML(
-        "beforeend",
-        `
+        );
+        itemAddInput.value = "";
+        updateCompare();
+      } else return;
+    } else if (e.target === propAddButton) {
+      if (propAddInput.value !== "") {
+        let prop = new Prop(propAddInput.value);
+        props.push(prop);
+        propAdded.insertAdjacentHTML(
+          "beforeend",
+          `
         <li class="list-group-item">${prop.content}</li>
         `
-      );
-      propAddInput.value = "";
-      updateCompare();
+        );
+        propAddInput.value = "";
+        updateCompare();
+      } else return;
     } else return;
-  } else if (e.target === rankList) {
-    console.log(rankList);
-  } else return;
-});
-
-function updateCompare() {
-  let blockCompare = document.getElementById("blockCompare");
-  let allCompareProps = "";
-  props.map((prop) => {
-    allCompareProps += `
-      <li class="list-group-item ">
-                <div class="row">
-                  <div class="col-md-8">${prop.content}</div>
-                  <div class="col-md-4">
-                    <input type="range" min="0" max="3" class="form-control-range rankList">
-                  </div>
-                </div>
-              </li>`;
   });
-  let allCompareItems = "";
 
-  items.map((item) => {
-    allCompareItems += `
+  function updateCompare() {
+    let blockCompare = document.getElementById("blockCompare");
+    let allCompareProps = "";
+    props.map((prop) => {
+      allCompareProps += `
+      <li class="list-group-item d-flex">
+        <div class="mr-auto">${prop.content}</div>
+        <span class="result badge badge-primary">0</span><input type="range" min="0" max="3" value="0" class="form-control-range w-25 rankList">
+      </li>
+      `;
+    });
+    let allCompareItems = "";
+
+    items.map((item) => {
+      allCompareItems += `
     
           <div class="card mb-3">
-            <div class="card-header">
-              <h5 id="allCompareTitle" data-id="${item.id}" class="card-title">${item.content}</h5>
-            </div>
+          <div class="card-body"><h5 id="allCompareTitle" data-id="${item.id}" class="card-title">${item.content}</h5></div>
+            
             <ul class="allCompareUl list-group list-group-flush">
             ${allCompareProps}
               
@@ -155,7 +148,18 @@ function updateCompare() {
           </div>
         
     `;
-  });
+    });
 
-  blockCompare.innerHTML = allCompareItems;
-}
+    blockCompare.innerHTML = allCompareItems;
+  }
+
+  const allCompareUl = document.getElementsByClassName("allCompareUl");
+  for (const el of allCompareUl) {
+    el.addEventListener("change", function (e) {
+      const result = document.querySelector(".result");
+      result.textContent = e.target.value;
+    });
+  }
+};
+
+main();
