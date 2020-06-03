@@ -26,10 +26,10 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <ul id="itemsAdded" class="list-group list-group-flush"></ul>
+                  <ul id="js-itemAdd" class="list-group list-group-flush"></ul>
                   <div class="input-group mt-3">
                     <input
-                      id="itemAddInput"
+                      id="js-itemAddInput"
                       type="text"
                       class="form-control"
                       placeholder="Ajouter un item à comparer"
@@ -38,7 +38,7 @@
                       <button
                         class="btn btn-outline-primary"
                         type="button"
-                        id="itemAddButton"
+                        id="js-itemAddBtn"
                       >
                         +
                       </button>
@@ -57,10 +57,10 @@
             <div class="card-body">
               <div class="row">
                 <div class="col">
-                  <ul id="propAdded" class="list-group list-group-flush"></ul>
+                  <ul id="js-propAdd" class="list-group list-group-flush"></ul>
                   <div class="input-group mt-3">
                     <input
-                      id="propAddInput"
+                      id="js-propAddInput"
                       type="text"
                       class="form-control"
                       placeholder="Ajouter une propriété à comparer"
@@ -69,7 +69,7 @@
                       <button
                         class="btn btn-outline-primary"
                         type="button"
-                        id="propAddButton"
+                        id="js-propAddBtn"
                       >
                         +
                       </button>
@@ -82,17 +82,13 @@
         </div>
         <!-- SIDEBAR END -->
         <!-- MAIN -->
-        <div id="blockCompare" class="col-lg-5"></div>
+        <div id="js-blockCompare" class="col-lg-5"></div>
       </div>
     </div>
 
     <!-- JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
+    <script src="./node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="./node_modules/popper.js/dist/popper.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="app.js"></script>
