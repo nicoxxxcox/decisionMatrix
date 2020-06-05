@@ -69,7 +69,7 @@ class Item {
                 .map(
                   (prop) => `<li class="list-group-item d-flex">
         <div class="mr-auto">${prop.title}</div>
-        <span class="result badge badge-pill badge-primary">0</span><input id="fader" type="range" min="0" max="3"   value="0" class="form-control-range w-25 rankList">
+        <span class="result badge badge-pill badge-primary">0</span><input type="range" min="0" max="3" value="0" class="rankList">
       </li>`
                 )
                 .join("")
@@ -134,31 +134,29 @@ const itemAddInput = document.getElementById("js-itemAddInput");
 const itemAddBtn = document.getElementById("js-itemAddBtn");
 const itemAdd = document.getElementById("js-itemAdd");
 
-blockCompare.addEventListener("change", function () {
-  let rangeEl = document.querySelectorAll(".rankList");
-  const results = document.querySelectorAll(".result");
+function displayRangeValue() {
+  blockCompare.addEventListener("change", function () {
+    let rangeEl = document.querySelectorAll(".rankList");
+    const results = document.querySelectorAll(".result");
 
-  rangeEl.forEach(function (range, key) {
-    range.addEventListener("input", function (e) {
-      const results = document.querySelectorAll(".result");
-      results[key].innerHTML = e.target.value;
-    });
-    range.addEventListener("mouseover", function (e) {
-      const results = document.querySelectorAll(".result");
-      results[key].innerHTML = e.target.value;
-    });
-    range.addEventListener("click", function (e) {
-      const results = document.querySelectorAll(".result");
-      results[key].innerHTML = e.target.value;
+    rangeEl.forEach(function (range, key) {
+      range.addEventListener("input", function (e) {
+        const results = document.querySelectorAll(".result");
+        results[key].innerHTML = e.target.value;
+      });
+      range.addEventListener("mouseover", function (e) {
+        const results = document.querySelectorAll(".result");
+        results[key].innerHTML = e.target.value;
+      });
+      range.addEventListener("click", function (e) {
+        const results = document.querySelectorAll(".result");
+        results[key].innerHTML = e.target.value;
+      });
     });
   });
-});
-
-function displayRangeValue(el, key) {
-  const results = document.querySelectorAll(".result");
-  results[key].innerHTML = el.target.value;
 }
 
+displayRangeValue();
 // init value to ""
 itemAddInput.value = "";
 
