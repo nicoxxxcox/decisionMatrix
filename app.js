@@ -1,4 +1,33 @@
 /**
+ * Represent table to construct the app
+ * @param {string} el - wrapper DOM element where the table where build
+ */
+class Table {
+  constructor(el = "app") {
+    if (typeof el !== "string") {
+      this.el = "app";
+      console.log("the app will build in #app div");
+    } else {
+      this.el = el;
+    }
+
+    this.initTemplate = ``;
+    this.wrapper = document.getElementById(this.el);
+    this.initRender();
+  }
+
+  initRender() {
+    let content = document.createElement("p");
+    let contentTextNode = document.createTextNode("mon texte");
+    content.appendChild(contentTextNode);
+
+    this.wrapper.appendChild(content);
+  }
+}
+
+new Table("app");
+
+/**
  * Represent an item to compare
  * @constructor
  * @param {string} title - title of the itel

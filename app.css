@@ -1,3 +1,37 @@
-.rankList {
-  width: 5rem;
+.relative {
+  position: relative;
+}
+.choice-btn__del {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  font-size: 0.7rem;
+  color: transparent;
+  transition: all 300ms;
+}
+
+.choice:hover > .choice-btn__del {
+  color: red;
+}
+
+.factor.cell {
+  min-width: 15rem;
+}
+
+.factor-btn__del {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  font-size: 0.7rem;
+  color: transparent;
+  transition: all 300ms;
+}
+
+.factor:hover > .factor-btn__del {
+  color: red;
+}
+
+.table th,
+.table td {
+  padding: 2rem;
 }

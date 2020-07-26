@@ -12,78 +12,90 @@
     <link rel="stylesheet" href="app.css" />
   </head>
   <body>
-    <div class="container-fluid">
+    <div class="container">
       <div class="display-2 mb-5">Decision Matrix</div>
+    </div>
 
+    <div class="container my-3">
       <div class="row">
-        <!-- SIDEBAR -->
-        <div class="col-lg-3">
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="card-title d-inline">
-                Items à comparer
-              </h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <ul id="js-itemAdd" class="list-group list-group-flush"></ul>
-                  <div class="input-group mt-3">
-                    <input
-                      id="js-itemAddInput"
-                      type="text"
-                      class="form-control"
-                      placeholder="Ajouter un item à comparer"
-                    />
-                    <div class="input-group-append">
-                      <button
-                        class="btn btn-outline-primary"
-                        type="button"
-                        id="js-itemAddBtn"
-                      >
-                        +
-                      </button>
+        <div class="col">
+          <div id="app">
+            <table class="table table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">
+                    <div class="rank text-center">1</div>
+                  </th>
+                </tr>
+                <tr>
+                  <th scope="col">&nbsp;</th>
+                  <th scope="col" class="relative choice cell">
+                    <div
+                      class="choice-content text-center"
+                      contenteditable="true"
+                    >
+                      Choix 1
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="card-title">
-                Propriétés à comparer
-              </h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <ul id="js-propAdd" class="list-group list-group-flush"></ul>
-                  <div class="input-group mt-3">
-                    <input
-                      id="js-propAddInput"
-                      type="text"
-                      class="form-control"
-                      placeholder="Ajouter une propriété à comparer"
-                    />
-                    <div class="input-group-append">
-                      <button
-                        class="btn btn-outline-primary"
-                        type="button"
-                        id="js-propAddBtn"
-                      >
-                        +
-                      </button>
+                    <span class="choice-btn__del">Enlever</span>
+                  </th>
+                  <th scope="col" class="addCell-choice cell">
+                    <div class="addCell-choice-content text-muted text-center">
+                      <small>Ajouter</small>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="relative factor cell">
+                    <div
+                      class="factor-content text-center"
+                      contenteditable="true"
+                    >
+                      Facteur 1
+                    </div>
+                    <span class="factor-btn__del">Enlever</span>
+                  </th>
+                  <td scope="row" class="">
+                    <div class="form-check-inline">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="optradio"
+                        value="1"
+                      />
+                    </div>
+                    <div class="form-check-inline">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="optradio"
+                        value="2"
+                      />
+                    </div>
+                    <div class="form-check-inline disabled">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="optradio"
+                        value="3"
+                      />
+                    </div>
+                    <span class="factor-btn__del">Enlever</span>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" class="addCell-factor cell">
+                    <div class="addCell-factor-content text-muted text-center">
+                      <small>Ajouter</small>
+                    </div>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <!-- SIDEBAR END -->
-        <!-- MAIN -->
-        <div id="js-blockCompare" class="col-lg-5"></div>
       </div>
     </div>
 
