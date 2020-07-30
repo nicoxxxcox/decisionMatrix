@@ -10,8 +10,8 @@ class Table {
     } else {
       this.el = el;
     }
-    this.choiceId = 1;
-    this.factorId = 1;
+    this.choiceId = 0;
+    this.factorId = 0;
 
     this.wrapper = document.getElementById(this.el);
     this.initRender(this.wrapper);
@@ -41,8 +41,8 @@ class Table {
             <span class="choice-btn__del">Enlever</span>
           </td>
           <td class="addCell-choice cell">
-            <div class="addCell-choice-content text-muted text-center">
-              <small>Ajouter</small>
+            <div id="addChoice-btn">
+              Ajouter
             </div>
           </td>
         </tr>
@@ -57,37 +57,13 @@ class Table {
             <span class="factor-btn__del">Enlever</span>
           </td>
           <td data-choiceid="${this.choiceId}" data-factorid="${this.factorId}">
-            <div class="form-check-inline">
-              <input
-                type="radio"
-                class="form-check-input"
-                name="optradio"
-                value="1"
-              />
-            </div>
-            <div class="form-check-inline">
-              <input
-                type="radio"
-                class="form-check-input"
-                name="optradio"
-                value="2"
-              />
-            </div>
-            <div class="form-check-inline">
-              <input
-                type="radio"
-                class="form-check-input"
-                name="optradio"
-                value="3"
-              />
-            </div>
-            <span class="factor-btn__del">Enlever</span>
+          -
           </td>
         </tr>
         <tr>
           <td class="addCell-factor cell">
-            <div class="addCell-factor-content text-muted text-center">
-              <small>Ajouter</small>
+            <div id="addFactor-btn">
+              Ajouter
             </div>
           </td>
         </tr>
@@ -128,15 +104,75 @@ class Table {
     return newCell;
   }
 
-  /**
-   *
-   */
   getNewChoiceId() {
     return this.choiceId++;
   }
   getNewFactorId() {
     return this.factorId++;
   }
+
+  createFactorCell() {
+    this.getNewFactorId();
+
+    let tdFactor = this.setNewElement(
+      "td",
+      "relative factor cell",
+      undefined,
+      undefined,
+      this.factorId
+    );
+    let divFactor = this.setNewElement("div", "factor-content text-center");
+    let spanFactor = this.setNewElement("span", "factor-btn__del");
+
+    spanFactor.appendChild(document.createTextNode("Enlever"));
+    divFactor.setAttribute("contenteditable", "true");
+    divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
+
+    tdFactor.appendChild(divFactor);
+    tdFactor.appendChild(spanFactor);
+
+    return tdFactor;
+  }
+
+  createRateCell() {
+    let tdRate = this.setNewElement(
+      "td",
+      undefined,
+      undefined,
+      this.choiceId,
+      this.factorId
+    );
+    tdRate.appendChild(document.createTextNode("-"));
+    return tdRate;
+  }
+
+  createNewRow() {
+    let countColumns = this.choiceId;
+    let newRow = this.setNewElement("tr");
+    newRow.appendChild(this.createFactorCell());
+
+    for (let i = 0; i < countColumns; i++) {
+      newRow.appendChild(this.createRateCell());
+    }
+    return newRow;
+  }
+
+  addNewRow() {
+    // compter le nombre de colones sur le document
+
+    // inserer juste avant le bouton ajouter la ligne de cellules
+    let tbody = document.querySelector("tbody");
+    let lastRow = document.querySelectorAll("tr");
+
+    tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
+  }
 }
 
+// Main program begin here
+
 let myTable = new Table("app");
+
+let addFactorbtn = document.getElementById("addFactor-btn");
+addFactorbtn.addEventListener("click", function () {
+  myTable.addNewRow();
+});
