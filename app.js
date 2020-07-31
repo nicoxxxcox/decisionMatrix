@@ -26,8 +26,9 @@ class Table {
         <tr>
           <td>#</td>
           <td data-choiceid="${this.choiceId}">
-            <div class="rank">1</div>
+            <div class="rank">0</div>
           </td>
+          <td class="add-col"></td>
         </tr>
         <tr>
           <td></td>                  
@@ -40,7 +41,7 @@ class Table {
             </div>
             <span class="choice-btn__del">Enlever</span>
           </td>
-          <td class="addCell-choice cell">
+          <td class="addCell-choice add-col cell">
             <div id="addChoice-btn">
               Ajouter
             </div>
@@ -59,13 +60,16 @@ class Table {
           <td data-choiceid="${this.choiceId}" data-factorid="${this.factorId}">
           -
           </td>
+          <td class="add-col"></td>
         </tr>
         <tr>
-          <td class="addCell-factor cell">
+          <td class="addCell-factor cell text-center">
             <div id="addFactor-btn">
               Ajouter
             </div>
           </td>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
     </table>
@@ -134,6 +138,28 @@ class Table {
     return tdFactor;
   }
 
+  createChoiceCell() {
+    this.getNewChoiceId();
+
+    let tdChoice = this.setNewElement(
+      "td",
+      "relative choice cell",
+      undefined,
+      this.choiceId
+    );
+    let divChoice = this.setNewElement("div", "choice-content text-center");
+    let spanChoice = this.setNewElement("span", "choice-btn__del");
+
+    spanChoice.appendChild(document.createTextNode("Enlever"));
+    divChoice.setAttribute("contenteditable", "true");
+    divChoice.appendChild(document.createTextNode(`choix ${this.choiceId}`));
+
+    tdChoice.appendChild(divChoice);
+    tdChoice.appendChild(spanChoice);
+
+    return tdChoice;
+  }
+
   createRateCell() {
     let tdRate = this.setNewElement(
       "td",
@@ -144,6 +170,14 @@ class Table {
     );
     tdRate.appendChild(document.createTextNode("-"));
     return tdRate;
+  }
+
+  createRankCell() {
+    let tdRank = this.setNewElement("td", undefined, undefined, this.choiceId);
+    let tdRankDiv = this.setNewElement("div", "rank");
+    tdRankDiv.appendChild(document.createTextNode("0"));
+    tdRank.appendChild(tdRankDiv);
+    return tdRank;
   }
 
   createNewRow() {
@@ -158,21 +192,50 @@ class Table {
   }
 
   addNewRow() {
-    // compter le nombre de colones sur le document
-
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
     let lastRow = document.querySelectorAll("tr");
 
     tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
   }
+
+  getFirstRow() {
+    let firstRow = document.querySelector("tr");
+    return firstRow;
+  }
+
+  cloneFactorCell() {
+    return document.querySelector("td.factor[data-factorid='1']").cloneNode();
+  }
+
+  addNewColumn() {
+    // compter le nombre de lignes sur le document
+    let countRow = this.factorId;
+    let lastTdColumn = document.querySelector(".add-col");
+
+    this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
+
+    // inserer juste avant le bouton ajouter la ligne de cellules
+    let tbody = document.querySelector("tbody");
+
+    console.log(lastTdColumn);
+
+    //tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
+  }
 }
 
+// =======================
 // Main program begin here
 
 let myTable = new Table("app");
 
-let addFactorbtn = document.getElementById("addFactor-btn");
-addFactorbtn.addEventListener("click", function () {
+let addFactorBtn = document.getElementById("addFactor-btn");
+let addChoiceBtn = document.getElementById("addChoice-btn");
+
+addChoiceBtn.addEventListener("click", function () {
+  myTable.addNewColumn();
+});
+
+addFactorBtn.addEventListener("click", function () {
   myTable.addNewRow();
 });
