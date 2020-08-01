@@ -28,7 +28,7 @@ class Table {
           <td data-choiceid="${this.choiceId}">
             <div class="rank">0</div>
           </td>
-          <td class="add-col"></td>
+          <td id="lastrankcol" class="add-col"></td>
         </tr>
         <tr>
           <td></td>                  
@@ -205,20 +205,21 @@ class Table {
   }
 
   cloneFactorCell() {
-    return document.querySelector("td.factor[data-factorid='1']").cloneNode();
+    return document
+      .querySelector("td.factor[data-factorid='1']")
+      .cloneNode(true);
   }
 
   addNewColumn() {
     // compter le nombre de lignes sur le document
     let countRow = this.factorId;
-    let lastTdColumn = document.querySelector(".add-col");
+
+    let lastTdColumn = document.getElementById("lastrankcol");
 
     this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
 
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
-
-    console.log(lastTdColumn);
 
     //tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
   }
