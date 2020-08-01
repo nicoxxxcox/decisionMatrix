@@ -41,13 +41,13 @@ class Table {
             </div>
             <span class="choice-btn__del">Enlever</span>
           </td>
-          <td class="addCell-choice add-col cell">
+          <td id="addChoiceBtn" class="addCell-choice add-col cell">
             <div id="addChoice-btn">
               Ajouter
             </div>
           </td>
         </tr>
-        <tr>
+        <tr class="factorRow">
           <td data-factorid="${this.factorId}" class="relative factor cell">
             <div
               class="factor-content text-center"
@@ -60,7 +60,6 @@ class Table {
           <td data-choiceid="${this.choiceId}" data-factorid="${this.factorId}">
           -
           </td>
-          <td class="add-col"></td>
         </tr>
         <tr>
           <td class="addCell-factor cell text-center">
@@ -182,7 +181,7 @@ class Table {
 
   createNewRow() {
     let countColumns = this.choiceId;
-    let newRow = this.setNewElement("tr");
+    let newRow = this.setNewElement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
     for (let i = 0; i < countColumns; i++) {
@@ -204,6 +203,15 @@ class Table {
     return firstRow;
   }
 
+  getSecondRow() {
+    let secondRow = document.querySelectorAll("tr")[1];
+    return secondRow;
+  }
+  getThirdRow() {
+    let secondRow = document.querySelectorAll("tr")[2];
+    return secondRow;
+  }
+
   cloneFactorCell() {
     return document
       .querySelector("td.factor[data-factorid='1']")
@@ -215,8 +223,14 @@ class Table {
     let countRow = this.factorId;
 
     let lastTdColumn = document.getElementById("lastrankcol");
+    let addTdColumn = document.getElementById("addChoiceBtn");
+    let factorRow = document.getElementsByClassName("factorRow");
 
     this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
+    this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
+    for (let i = 0; i < countRow; i++) {
+      factorRow[i].appendChild(this.createRateCell());
+    }
 
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
