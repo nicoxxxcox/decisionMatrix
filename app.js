@@ -10,16 +10,20 @@ class Table {
     } else {
       this.el = el;
     }
+    this.wrapper = document.getElementById(this.el);
+
     this.choiceId = 0;
     this.factorId = 0;
 
-    this.wrapper = document.getElementById(this.el);
+    this.choices = [];
+    this.factors = [];
+
     this.initRender(this.wrapper);
   }
 
   getInitTemplate() {
-    this.getNewChoiceId();
-    this.getNewFactorId();
+    // this.getNewChoiceId();
+    // this.getNewFactorId();
     return `
     <table class="table table-bordered table-responsive">
       <tbody>
@@ -140,62 +144,88 @@ class Table {
   createChoiceCell() {
     this.getNewChoiceId();
 
-    let tdChoice = this.setNewElement(
+    let choiceCell = this.setNewElement(
       "td",
       "relative choice cell",
       undefined,
       this.choiceId
     );
-    let divChoice = this.setNewElement("div", "choice-content text-center");
-    let spanChoice = this.setNewElement("span", "choice-btn__del");
+    let choiceDiv = this.setNewElement("div", "choice-content text-center");
+    let choiceSpan = this.setNewElement("span", "choice-btn__del");
 
-    spanChoice.appendChild(document.createTextNode("Enlever"));
-    divChoice.setAttribute("contenteditable", "true");
-    divChoice.appendChild(document.createTextNode(`choix ${this.choiceId}`));
+    choiceSpan.appendChild(document.createTextNode("Enlever"));
+    choiceDiv.setAttribute("contenteditable", "true");
+    choiceDiv.appendChild(document.createTextNode(`choix ${this.choiceId}`));
 
-    tdChoice.appendChild(divChoice);
-    tdChoice.appendChild(spanChoice);
+    choiceCell.appendChild(choiceDiv);
+    choiceCell.appendChild(choiceSpan);
 
-    return tdChoice;
+    return choiceCell;
   }
 
   createRateCell() {
-    let tdRate = this.setNewElement(
+    let cellRate = this.setNewElement(
       "td",
       undefined,
       undefined,
       this.choiceId,
       this.factorId
     );
-    tdRate.appendChild(document.createTextNode("-"));
-    return tdRate;
+    cellRate.appendChild(document.createTextNode("-"));
+
+    return cellRate;
   }
 
   createRankCell() {
-    let tdRank = this.setNewElement("td", undefined, undefined, this.choiceId);
-    let tdRankDiv = this.setNewElement("div", "rank");
-    tdRankDiv.appendChild(document.createTextNode("0"));
-    tdRank.appendChild(tdRankDiv);
-    return tdRank;
+    let cellRank = this.setNewElement(
+      "td",
+      undefined,
+      undefined,
+      this.choiceId
+    );
+    let cellRankDiv = this.setNewElement("div", "rank");
+    cellRankDiv.appendChild(document.createTextNode("0"));
+    cellRank.appendChild(cellRankDiv);
+
+    return cellRank;
   }
 
   createNewRow() {
-    let countColumns = this.choiceId;
+    let columnCount = this.choiceId;
     let newRow = this.setNewElement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
-    for (let i = 0; i < countColumns; i++) {
+    for (let i = 0; i < columnCount; i++) {
       newRow.appendChild(this.createRateCell());
     }
+
     return newRow;
   }
 
-  addNewRow() {
+  insertNewRow() {
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
     let lastRow = document.querySelectorAll("tr");
-
     tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
+  }
+
+  insertNewColumn() {
+    // compter le nombre de lignes sur le document
+    let rowCount = this.factorId;
+
+    let lastTdColumn = document.getElementById("lastrankcol");
+    let addTdColumn = document.getElementById("addChoiceBtn");
+    let factorRow = document.getElementsByClassName("factorRow");
+
+    this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
+    this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
+    for (let i = 0; i < rowCount; i++) {
+      factorRow[i].appendChild(this.createRateCell());
+    }
+  }
+
+  deleteRow(row) {
+    row.parentNode.remove();
   }
 
   getFirstRow() {
@@ -217,26 +247,6 @@ class Table {
       .querySelector("td.factor[data-factorid='1']")
       .cloneNode(true);
   }
-
-  addNewColumn() {
-    // compter le nombre de lignes sur le document
-    let countRow = this.factorId;
-
-    let lastTdColumn = document.getElementById("lastrankcol");
-    let addTdColumn = document.getElementById("addChoiceBtn");
-    let factorRow = document.getElementsByClassName("factorRow");
-
-    this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
-    this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
-    for (let i = 0; i < countRow; i++) {
-      factorRow[i].appendChild(this.createRateCell());
-    }
-
-    // inserer juste avant le bouton ajouter la ligne de cellules
-    let tbody = document.querySelector("tbody");
-
-    //tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
-  }
 }
 
 // =======================
@@ -248,9 +258,18 @@ let addFactorBtn = document.getElementById("addFactor-btn");
 let addChoiceBtn = document.getElementById("addChoice-btn");
 
 addChoiceBtn.addEventListener("click", function () {
-  myTable.addNewColumn();
+  myTable.insertNewColumn();
 });
 
 addFactorBtn.addEventListener("click", function () {
-  myTable.addNewRow();
+  myTable.insertNewRow();
+});
+
+document.getElementById(myTable.el).addEventListener("change", function () {
+  let factorBtnDel = document.getElementsByClassName("factor-btn__del");
+  for (let i = 0; i < factorBtnDel.length; i++) {
+    factorBtnDel[i].addEventListener("click", function (e) {
+      console.log(e.target);
+    });
+  }
 });
