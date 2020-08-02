@@ -191,7 +191,7 @@ class Table {
   }
 
   createNewRow() {
-    let columnCount = this.choiceId;
+    let columnCount = document.getElementsByClassName("choice").length;
     let newRow = this.setNewElement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
@@ -210,8 +210,7 @@ class Table {
   }
 
   insertNewColumn() {
-    // compter le nombre de lignes sur le document
-    let rowCount = this.factorId;
+    let rowCount = document.getElementsByClassName("factor").length;
 
     let lastTdColumn = document.getElementById("lastrankcol");
     let addTdColumn = document.getElementById("addChoiceBtn");
