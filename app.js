@@ -128,12 +128,13 @@ class Table {
       undefined,
       this.factorId
     );
-    let divFactor = this.setNewElement("div", "factor-content text-center");
-    let spanFactor = this.setNewElement("span", "factor-btn__del");
 
-    spanFactor.appendChild(document.createTextNode("Enlever"));
+    let divFactor = this.setNewElement("div", "factor-content text-center");
     divFactor.setAttribute("contenteditable", "true");
     divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
+
+    let spanFactor = this.setNewElement("span", "factor-btn__del");
+    spanFactor.appendChild(document.createTextNode("Enlever"));
 
     tdFactor.appendChild(divFactor);
     tdFactor.appendChild(spanFactor);
@@ -255,6 +256,7 @@ let myTable = new Table("app");
 
 let addFactorBtn = document.getElementById("addFactor-btn");
 let addChoiceBtn = document.getElementById("addChoice-btn");
+let factorbtndel = document.getElementsByClassName("factor-btn__del");
 
 addChoiceBtn.addEventListener("click", function () {
   myTable.insertNewColumn();
@@ -264,11 +266,9 @@ addFactorBtn.addEventListener("click", function () {
   myTable.insertNewRow();
 });
 
-document.getElementById(myTable.el).addEventListener("change", function () {
-  let factorBtnDel = document.getElementsByClassName("factor-btn__del");
-  for (let i = 0; i < factorBtnDel.length; i++) {
-    factorBtnDel[i].addEventListener("click", function (e) {
-      console.log(e.target);
-    });
-  }
+document.body.addEventListener("click", function (e) {
+  for (let i = 0; i < factorbtndel.length; i++)
+    if (e.target == factorbtndel[i]) {
+      myTable.deleteRow(e.target.parentNode);
+    }
 });
