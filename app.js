@@ -19,11 +19,11 @@ class Table {
     this.factors = [];
 
     this.initRender(this.wrapper);
+
+    this.main();
   }
 
   getInitTemplate() {
-    // this.getNewChoiceId();
-    // this.getNewFactorId();
     return `
     <table class="table table-bordered table-responsive">
       <tbody>
@@ -41,7 +41,7 @@ class Table {
               class="choice-content text-center"
               contenteditable="true"
             >
-              Choix 1
+              Choix 0
             </div>
             <span class="choice-btn__del">Enlever</span>
           </td>
@@ -57,7 +57,7 @@ class Table {
               class="factor-content text-center"
               contenteditable="true"
             >
-              Facteur 1
+              Facteur 0
             </div>
             <span class="factor-btn__del">Enlever</span>
           </td>
@@ -108,6 +108,7 @@ class Table {
     if (factorid !== undefined) {
       newCell.dataset.factorid = factorid;
     }
+
     return newCell;
   }
 
@@ -247,28 +248,36 @@ class Table {
       .querySelector("td.factor[data-factorid='1']")
       .cloneNode(true);
   }
+
+  /**
+   * The main function
+   * @author Nico
+   * @returns {void}
+   *
+   */
+  main() {
+    let addFactorBtn = document.getElementById("addFactor-btn");
+    let addChoiceBtn = document.getElementById("addChoice-btn");
+    let factorbtndel = document.getElementsByClassName("factor-btn__del");
+
+    addChoiceBtn.addEventListener("click", function () {
+      myTable.insertNewColumn();
+    });
+
+    addFactorBtn.addEventListener("click", function () {
+      myTable.insertNewRow();
+    });
+
+    document.body.addEventListener("click", function (e) {
+      for (let i = 0; i < factorbtndel.length; i++)
+        if (e.target == factorbtndel[i]) {
+          myTable.deleteRow(e.target.parentNode);
+        }
+    });
+  }
 }
 
 // =======================
 // Main program begin here
 
 let myTable = new Table("app");
-
-let addFactorBtn = document.getElementById("addFactor-btn");
-let addChoiceBtn = document.getElementById("addChoice-btn");
-let factorbtndel = document.getElementsByClassName("factor-btn__del");
-
-addChoiceBtn.addEventListener("click", function () {
-  myTable.insertNewColumn();
-});
-
-addFactorBtn.addEventListener("click", function () {
-  myTable.insertNewRow();
-});
-
-document.body.addEventListener("click", function (e) {
-  for (let i = 0; i < factorbtndel.length; i++)
-    if (e.target == factorbtndel[i]) {
-      myTable.deleteRow(e.target.parentNode);
-    }
-});
