@@ -1,6 +1,3 @@
-.relative {
-  position: relative;
-}
 .choice-btn__del {
   position: absolute;
   left: 3px;
@@ -29,8 +26,14 @@
   cursor: pointer;
 }
 
-.factor:hover > .factor-btn__del {
+.factor:hover > .btn-del,
+.choice:hover > .btn-del {
   color: red;
+}
+
+.factor,
+.choice {
+  position: relative;
 }
 
 .table th,

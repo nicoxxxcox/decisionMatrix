@@ -20,6 +20,7 @@ class Table {
 
     this.initRender(this.wrapper);
 
+    // execute the main function
     this.main();
   }
 
@@ -36,30 +37,30 @@ class Table {
         </tr>
         <tr>
           <td></td>                  
-          <td data-choiceid="${this.choiceId}"  class="relative choice cell">
+          <td data-choiceid="${this.choiceId}"  class="choice cell">
             <div
               class="choice-content text-center"
               contenteditable="true"
             >
               Choix 0
             </div>
-            <span class="choice-btn__del">Enlever</span>
+            <span class="choice-btn__del btn-del">Enlever</span>
           </td>
-          <td id="addChoiceBtn" class="addCell-choice add-col cell">
+          <td class="addCell-choice add-col cell">
             <div id="addChoice-btn">
               Ajouter
             </div>
           </td>
         </tr>
         <tr class="factorRow">
-          <td data-factorid="${this.factorId}" class="relative factor cell">
+          <td data-factorid="${this.factorId}" class="factor cell">
             <div
               class="factor-content text-center"
               contenteditable="true"
             >
               Facteur 0
             </div>
-            <span class="factor-btn__del">Enlever</span>
+            <span class="factor-btn__del btn-del">Enlever</span>
           </td>
           <td data-choiceid="${this.choiceId}" data-factorid="${this.factorId}">
           -
@@ -112,9 +113,18 @@ class Table {
     return newCell;
   }
 
+  /**
+   * Return and increment a new choice id
+   * @returns {Number}
+   */
   getNewChoiceId() {
     return this.choiceId++;
   }
+
+  /**
+   * Return and increment a new factor id
+   * @returns {Number}
+   */
   getNewFactorId() {
     return this.factorId++;
   }
@@ -124,7 +134,7 @@ class Table {
 
     let tdFactor = this.setNewElement(
       "td",
-      "relative factor cell",
+      "factor cell",
       undefined,
       undefined,
       this.factorId
@@ -134,7 +144,7 @@ class Table {
     divFactor.setAttribute("contenteditable", "true");
     divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
 
-    let spanFactor = this.setNewElement("span", "factor-btn__del");
+    let spanFactor = this.setNewElement("span", "factor-btn__del btn-del");
     spanFactor.appendChild(document.createTextNode("Enlever"));
 
     tdFactor.appendChild(divFactor);
@@ -152,8 +162,9 @@ class Table {
       undefined,
       this.choiceId
     );
+
     let choiceDiv = this.setNewElement("div", "choice-content text-center");
-    let choiceSpan = this.setNewElement("span", "choice-btn__del");
+    let choiceSpan = this.setNewElement("span", "choice-btn__del btn-del");
 
     choiceSpan.appendChild(document.createTextNode("Enlever"));
     choiceDiv.setAttribute("contenteditable", "true");
@@ -215,7 +226,7 @@ class Table {
     let rowCount = document.getElementsByClassName("factor").length;
 
     let lastTdColumn = document.getElementById("lastrankcol");
-    let addTdColumn = document.getElementById("addChoiceBtn");
+    let addTdColumn = this.getSecondRow().lastElementChild;
     let factorRow = document.getElementsByClassName("factorRow");
 
     this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
@@ -228,6 +239,8 @@ class Table {
   deleteRow(row) {
     row.parentNode.remove();
   }
+
+  deleteColumn() {}
 
   getFirstRow() {
     let firstRow = document.querySelector("tr");
@@ -269,10 +282,16 @@ class Table {
     });
 
     document.body.addEventListener("click", function (e) {
-      for (let i = 0; i < factorbtndel.length; i++)
+      for (let i = 0; i < factorbtndel.length; i++) {
         if (e.target == factorbtndel[i]) {
           myTable.deleteRow(e.target.parentNode);
         }
+      }
+      for (let i = 0; i < factorbtndel.length; i++) {
+        if (e.target == factorbtndel[i]) {
+          myTable.deleteRow(e.target.parentNode);
+        }
+      }
     });
   }
 }
