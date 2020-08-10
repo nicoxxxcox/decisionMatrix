@@ -132,23 +132,28 @@ class Table {
   createFactorCell() {
     this.getNewFactorId();
 
-    let tdFactor = this.setNewElement(
-      "td",
-      "factor cell",
-      undefined,
-      undefined,
-      this.factorId
-    );
+    let tdFactor = document
+      .querySelector("[data-factorid='0']")
+      .cloneNode(true);
+    tdFactor.dataset.factorid = this.factorId;
+    tdFactor.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
+    // let tdFactor = this.setNewElement(
+    //   "td",
+    //   "factor cell",
+    //   undefined,
+    //   undefined,
+    //   this.factorId
+    // );
 
-    let divFactor = this.setNewElement("div", "factor-content text-center");
-    divFactor.setAttribute("contenteditable", "true");
-    divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
+    // let divFactor = this.setNewElement("div", "factor-content text-center");
+    // divFactor.setAttribute("contenteditable", "true");
+    // divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
 
-    let spanFactor = this.setNewElement("span", "factor-btn__del btn-del");
-    spanFactor.appendChild(document.createTextNode("Enlever"));
+    // let spanFactor = this.setNewElement("span", "factor-btn__del btn-del");
+    // spanFactor.appendChild(document.createTextNode("Enlever"));
 
-    tdFactor.appendChild(divFactor);
-    tdFactor.appendChild(spanFactor);
+    // tdFactor.appendChild(divFactor);
+    // tdFactor.appendChild(spanFactor);
 
     return tdFactor;
   }
