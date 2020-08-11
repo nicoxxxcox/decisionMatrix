@@ -30,8 +30,8 @@ class Table {
       <tbody>
         <tr>
           <td>#</td>
-          <td data-choiceid="${this.choiceId}">
-            <div class="rank">0</div>
+          <td class="rank" data-choiceid="${this.choiceId}">
+            <div>0</div>
           </td>
           <td id="lastrankcol" class="add-col"></td>
         </tr>
@@ -130,86 +130,46 @@ class Table {
   }
 
   createFactorCell() {
-    this.getNewFactorId();
-
-    let tdFactor = document
+    let factorCell = document
       .querySelector("[data-factorid='0']")
       .cloneNode(true);
-    tdFactor.dataset.factorid = this.factorId;
-    tdFactor.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
-    // let tdFactor = this.setNewElement(
-    //   "td",
-    //   "factor cell",
-    //   undefined,
-    //   undefined,
-    //   this.factorId
-    // );
-
-    // let divFactor = this.setNewElement("div", "factor-content text-center");
-    // divFactor.setAttribute("contenteditable", "true");
-    // divFactor.appendChild(document.createTextNode(`facteur ${this.factorId}`));
-
-    // let spanFactor = this.setNewElement("span", "factor-btn__del btn-del");
-    // spanFactor.appendChild(document.createTextNode("Enlever"));
-
-    // tdFactor.appendChild(divFactor);
-    // tdFactor.appendChild(spanFactor);
-
-    return tdFactor;
+    factorCell.dataset.factorid = this.factorId;
+    factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
+    return factorCell;
   }
 
   createChoiceCell() {
-    this.getNewChoiceId();
-
-    let choiceCell = this.setNewElement(
-      "td",
-      "relative choice cell",
-      undefined,
-      this.choiceId
-    );
-
-    let choiceDiv = this.setNewElement("div", "choice-content text-center");
-    let choiceSpan = this.setNewElement("span", "choice-btn__del btn-del");
-
-    choiceSpan.appendChild(document.createTextNode("Enlever"));
-    choiceDiv.setAttribute("contenteditable", "true");
-    choiceDiv.appendChild(document.createTextNode(`choix ${this.choiceId}`));
-
-    choiceCell.appendChild(choiceDiv);
-    choiceCell.appendChild(choiceSpan);
-
+    let choiceCell = document
+      .querySelector(".choice.cell[data-choiceid='0']")
+      .cloneNode(true);
+    choiceCell.dataset.choiceid = this.choiceId;
+    choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
     return choiceCell;
   }
 
   createRateCell() {
-    let cellRate = this.setNewElement(
-      "td",
-      undefined,
-      undefined,
-      this.choiceId,
-      this.factorId
-    );
-    cellRate.appendChild(document.createTextNode("-"));
+    let cellRate = document
+      .querySelector("[data-choiceid='0'][data-factorid='0']")
+      .cloneNode(true);
+    cellRate.dataset.choiceid = this.choiceId;
+    cellRate.dataset.factorid = this.factorId;
+    cellRate.innerHTML = "-";
 
     return cellRate;
   }
 
   createRankCell() {
-    let cellRank = this.setNewElement(
-      "td",
-      undefined,
-      undefined,
-      this.choiceId
-    );
-    let cellRankDiv = this.setNewElement("div", "rank");
-    cellRankDiv.appendChild(document.createTextNode("0"));
-    cellRank.appendChild(cellRankDiv);
+    let cellRank = document
+      .querySelector(".rank[data-choiceid='0']")
+      .cloneNode(true);
+    cellRank.dataset.choiceid = this.choiceId;
+    cellRank.firstElementChild.innerHTML = "0";
 
     return cellRank;
   }
 
   createNewRow() {
-    let columnCount = document.getElementsByClassName("choice").length;
+    let columnCount = this.countColumn();
     let newRow = this.setNewElement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
@@ -228,7 +188,7 @@ class Table {
   }
 
   insertNewColumn() {
-    let rowCount = document.getElementsByClassName("factor").length;
+    let rowCount = this.countRow();
 
     let lastTdColumn = document.getElementById("lastrankcol");
     let addTdColumn = this.getSecondRow().lastElementChild;
@@ -245,7 +205,20 @@ class Table {
     row.parentNode.remove();
   }
 
-  deleteColumn() {}
+  deleteColumn(column) {
+    let columns = document.querySelectorAll(`[data-choiceid='${column}']`);
+    for (let i = 0; i < columns.length; i++) {
+      columns[i].remove();
+    }
+  }
+
+  countRow() {
+    return document.getElementsByClassName("factor").length;
+  }
+
+  countColumn() {
+    return document.getElementsByClassName("choice").length;
+  }
 
   getFirstRow() {
     let firstRow = document.querySelector("tr");
@@ -277,12 +250,15 @@ class Table {
     let addFactorBtn = document.getElementById("addFactor-btn");
     let addChoiceBtn = document.getElementById("addChoice-btn");
     let factorbtndel = document.getElementsByClassName("factor-btn__del");
+    let choicebtndel = document.getElementsByClassName("choice-btn__del");
 
     addChoiceBtn.addEventListener("click", function () {
+      myTable.getNewChoiceId();
       myTable.insertNewColumn();
     });
 
     addFactorBtn.addEventListener("click", function () {
+      myTable.getNewFactorId();
       myTable.insertNewRow();
     });
 
@@ -292,9 +268,10 @@ class Table {
           myTable.deleteRow(e.target.parentNode);
         }
       }
-      for (let i = 0; i < factorbtndel.length; i++) {
-        if (e.target == factorbtndel[i]) {
-          myTable.deleteRow(e.target.parentNode);
+
+      for (let i = 0; i < choicebtndel.length; i++) {
+        if (e.target == choicebtndel[i]) {
+          myTable.deleteColumn(e.target.parentNode.dataset.choiceid);
         }
       }
     });
