@@ -19,9 +19,6 @@ class Table {
     this.factors = [];
 
     this.initRender(this.wrapper);
-
-    // execute the main function
-    this.main();
   }
 
   getInitTemplate() {
@@ -239,46 +236,40 @@ class Table {
       .querySelector("td.factor[data-factorid='1']")
       .cloneNode(true);
   }
-
-  /**
-   * The main function
-   * @author Nico
-   * @returns {void}
-   *
-   */
-  main() {
-    let addFactorBtn = document.getElementById("addFactor-btn");
-    let addChoiceBtn = document.getElementById("addChoice-btn");
-    let factorbtndel = document.getElementsByClassName("factor-btn__del");
-    let choicebtndel = document.getElementsByClassName("choice-btn__del");
-
-    addChoiceBtn.addEventListener("click", function () {
-      myTable.getNewChoiceId();
-      myTable.insertNewColumn();
-    });
-
-    addFactorBtn.addEventListener("click", function () {
-      myTable.getNewFactorId();
-      myTable.insertNewRow();
-    });
-
-    document.body.addEventListener("click", function (e) {
-      for (let i = 0; i < factorbtndel.length; i++) {
-        if (e.target == factorbtndel[i]) {
-          myTable.deleteRow(e.target.parentNode);
-        }
-      }
-
-      for (let i = 0; i < choicebtndel.length; i++) {
-        if (e.target == choicebtndel[i]) {
-          myTable.deleteColumn(e.target.parentNode.dataset.choiceid);
-        }
-      }
-    });
-  }
 }
 
 // =======================
 // Main program begin here
 
-let myTable = new Table("app");
+const myTable = new Table("app");
+const main = function () {
+  let addFactorBtn = document.getElementById("addFactor-btn");
+  let addChoiceBtn = document.getElementById("addChoice-btn");
+  let factorbtndel = document.getElementsByClassName("factor-btn__del");
+  let choicebtndel = document.getElementsByClassName("choice-btn__del");
+
+  addChoiceBtn.addEventListener("click", function () {
+    myTable.getNewChoiceId();
+    myTable.insertNewColumn();
+  });
+
+  addFactorBtn.addEventListener("click", function () {
+    myTable.getNewFactorId();
+    myTable.insertNewRow();
+  });
+
+  document.body.addEventListener("click", function (e) {
+    for (let i = 0; i < factorbtndel.length; i++) {
+      if (e.target == factorbtndel[i]) {
+        myTable.deleteRow(e.target.parentNode);
+      }
+    }
+
+    for (let i = 0; i < choicebtndel.length; i++) {
+      if (e.target == choicebtndel[i]) {
+        myTable.deleteColumn(e.target.parentNode.dataset.choiceid);
+      }
+    }
+  });
+};
+main();
