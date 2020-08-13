@@ -92,29 +92,29 @@ class Table {
    * @param {string} choiceid
    * @param {string} factorid
    */
-  setNewElement(tag = "div", classes, id, choiceid, factorid) {
-    let newCell = document.createElement(tag);
+  createNewDOMELement(tag = "div", classes, id, choiceid, factorid) {
+    let newDOMELement = document.createElement(tag);
     if (classes !== undefined) {
-      newCell.setAttribute("class", classes);
+      newDOMELement.setAttribute("class", classes);
     }
     if (id !== undefined) {
-      newCell.setAttribute("id", id);
+      newDOMELement.setAttribute("id", id);
     }
     if (choiceid !== undefined) {
-      newCell.dataset.choiceid = choiceid;
+      newDOMELement.dataset.choiceid = choiceid;
     }
     if (factorid !== undefined) {
-      newCell.dataset.factorid = factorid;
+      newDOMELement.dataset.factorid = factorid;
     }
 
-    return newCell;
+    return newDOMELement;
   }
 
   /**
    * Return and increment a new choice id
    * @returns {Number}
    */
-  getNewChoiceId() {
+  incrementChoiceId() {
     return this.choiceId++;
   }
 
@@ -122,52 +122,54 @@ class Table {
    * Return and increment a new factor id
    * @returns {Number}
    */
-  getNewFactorId() {
+  incrementFactorId() {
     return this.factorId++;
   }
 
+  cloneCell(cell) {
+    return cell.cloneNode(true);
+  }
+
   createFactorCell() {
-    let factorCell = document
-      .querySelector("[data-factorid='0']")
-      .cloneNode(true);
+    let factorCell = this.cloneCell(
+      document.querySelector("[data-factorid='0']")
+    );
     factorCell.dataset.factorid = this.factorId;
     factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
     return factorCell;
   }
 
   createChoiceCell() {
-    let choiceCell = document
-      .querySelector(".choice.cell[data-choiceid='0']")
-      .cloneNode(true);
+    let choiceCell = this.cloneCell(
+      document.querySelector(".choice.cell[data-choiceid='0']")
+    );
     choiceCell.dataset.choiceid = this.choiceId;
     choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
     return choiceCell;
   }
 
   createRateCell() {
-    let cellRate = document
-      .querySelector("[data-choiceid='0'][data-factorid='0']")
-      .cloneNode(true);
+    let cellRate = this.cloneCell(
+      document.querySelector("[data-choiceid='0'][data-factorid='0']")
+    );
     cellRate.dataset.choiceid = this.choiceId;
     cellRate.dataset.factorid = this.factorId;
     cellRate.innerHTML = "-";
-
     return cellRate;
   }
 
   createRankCell() {
-    let cellRank = document
-      .querySelector(".rank[data-choiceid='0']")
-      .cloneNode(true);
+    let cellRank = this.cloneCell(
+      document.querySelector(".rank[data-choiceid='0']")
+    );
     cellRank.dataset.choiceid = this.choiceId;
     cellRank.firstElementChild.innerHTML = "0";
-
     return cellRank;
   }
 
   createNewRow() {
-    let columnCount = this.countColumn();
-    let newRow = this.setNewElement("tr", "factorRow");
+    let columnCount = this.countChoices();
+    let newRow = this.createNewDOMELement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
     for (let i = 0; i < columnCount; i++) {
@@ -185,7 +187,7 @@ class Table {
   }
 
   insertNewColumn() {
-    let rowCount = this.countRow();
+    let rowCount = this.countFactors();
 
     let lastTdColumn = document.getElementById("lastrankcol");
     let addTdColumn = this.getSecondRow().lastElementChild;
@@ -209,11 +211,11 @@ class Table {
     }
   }
 
-  countRow() {
+  countFactors() {
     return document.getElementsByClassName("factor").length;
   }
 
-  countColumn() {
+  countChoices() {
     return document.getElementsByClassName("choice").length;
   }
 
@@ -230,12 +232,6 @@ class Table {
     let secondRow = document.querySelectorAll("tr")[2];
     return secondRow;
   }
-
-  cloneFactorCell() {
-    return document
-      .querySelector("td.factor[data-factorid='1']")
-      .cloneNode(true);
-  }
 }
 
 // =======================
@@ -249,12 +245,12 @@ const main = function () {
   let choicebtndel = document.getElementsByClassName("choice-btn__del");
 
   addChoiceBtn.addEventListener("click", function () {
-    myTable.getNewChoiceId();
+    myTable.incrementChoiceId();
     myTable.insertNewColumn();
   });
 
   addFactorBtn.addEventListener("click", function () {
-    myTable.getNewFactorId();
+    myTable.incrementFactorId();
     myTable.insertNewRow();
   });
 
