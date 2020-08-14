@@ -33,7 +33,7 @@ class Table {
           <td id="lastrankcol" class="add-col"></td>
         </tr>
         <tr>
-          <td></td>                  
+          <td></td>
           <td data-choiceid="${this.choiceId}"  class="choice cell">
             <div
               class="choice-content text-center"
@@ -243,6 +243,40 @@ const main = function () {
   let addChoiceBtn = document.getElementById("addChoice-btn");
   let factorbtndel = document.getElementsByClassName("factor-btn__del");
   let choicebtndel = document.getElementsByClassName("choice-btn__del");
+
+  getRanks = function () {
+    let ranks = document.querySelectorAll("[data-choiceid][data-factorid]");
+    for (let i = 0; i < ranks.length; i++) {
+      ranks[i].addEventListener("click", function () {
+        let rate = 0;
+        rate += 1;
+        ranks[i].innerHTML = rate;
+      });
+    }
+  };
+
+  getRanks();
+
+  // Select the node that will be observed for mutations
+  const targetNode = document.getElementById("app");
+
+  // Options for the observer (which mutations to observe)
+  const config = {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  };
+
+  // Callback function to execute when mutations are observed
+  const callback = function (mutationsList, observer) {
+    getRanks();
+  };
+
+  // Create an observer instance linked to the callback function
+  const observer = new MutationObserver(callback);
+
+  // Start observing the target node for configured mutations
+  observer.observe(targetNode, config);
 
   addChoiceBtn.addEventListener("click", function () {
     myTable.incrementChoiceId();
