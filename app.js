@@ -210,6 +210,24 @@ class Table {
       columns[i].remove();
     }
   }
+  incrementRank() {
+    let table = document.getElementById("app");
+
+    table.addEventListener("click", function (e) {
+      if (
+        e.target.hasAttribute("data-choiceid") &&
+        e.target.hasAttribute("data-factorid")
+      ) {
+        let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
+        if (a < 3) {
+          a++;
+        } else {
+          a = 0;
+        }
+        e.target.innerHTML = a;
+      }
+    });
+  }
 
   countFactors() {
     return document.getElementsByClassName("factor").length;
@@ -244,39 +262,7 @@ const main = function () {
   let factorbtndel = document.getElementsByClassName("factor-btn__del");
   let choicebtndel = document.getElementsByClassName("choice-btn__del");
 
-  getRanks = function () {
-    let ranks = document.querySelectorAll("[data-choiceid][data-factorid]");
-    for (let i = 0; i < ranks.length; i++) {
-      ranks[i].addEventListener("click", function () {
-        let rate = 0;
-        rate += 1;
-        ranks[i].innerHTML = rate;
-      });
-    }
-  };
-
-  getRanks();
-
-  // Select the node that will be observed for mutations
-  const targetNode = document.getElementById("app");
-
-  // Options for the observer (which mutations to observe)
-  const config = {
-    attributes: true,
-    childList: true,
-    subtree: true,
-  };
-
-  // Callback function to execute when mutations are observed
-  const callback = function (mutationsList, observer) {
-    getRanks();
-  };
-
-  // Create an observer instance linked to the callback function
-  const observer = new MutationObserver(callback);
-
-  // Start observing the target node for configured mutations
-  observer.observe(targetNode, config);
+  myTable.incrementRank();
 
   addChoiceBtn.addEventListener("click", function () {
     myTable.incrementChoiceId();
@@ -302,4 +288,5 @@ const main = function () {
     }
   });
 };
+
 main();
