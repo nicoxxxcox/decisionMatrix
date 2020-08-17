@@ -15,8 +15,18 @@ class Table {
     this.choiceId = 0;
     this.factorId = 0;
 
-    this.choices = [];
-    this.factors = [];
+    this.data = {
+      choices: {
+        id: 0,
+        content: "Choix 0",
+        rank: "-",
+        rate: 0,
+      },
+      factors: {
+        id: 0,
+        content: "Facteur 0",
+      },
+    };
 
     this.initRender(this.wrapper);
   }
@@ -27,19 +37,19 @@ class Table {
       <tbody>
         <tr>
           <td>#</td>
-          <td class="rank" data-choiceid="${this.choiceId}">
-            <div>0</div>
+          <td class="rank" data-choiceid="${this.data.choices.id}">
+            <div>${this.data.choices.rate}</div>
           </td>
           <td id="lastrankcol" class="add-col"></td>
         </tr>
         <tr>
           <td></td>
-          <td data-choiceid="${this.choiceId}"  class="choice cell">
+          <td data-choiceid="${this.data.choices.id}"  class="choice cell">
             <div
               class="choice-content text-center"
               contenteditable="true"
             >
-              Choix 0
+              ${this.data.choices.content}
             </div>
             <span class="choice-btn__del btn-del">Enlever</span>
           </td>
@@ -50,17 +60,17 @@ class Table {
           </td>
         </tr>
         <tr class="factorRow">
-          <td data-factorid="${this.factorId}" class="factor cell">
+          <td data-factorid="${this.data.factors.id}" class="factor cell">
             <div
               class="factor-content text-center"
               contenteditable="true"
             >
-              Facteur 0
+              ${this.data.factors.content}
             </div>
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
-          <td data-choiceid="${this.choiceId}" data-factorid="${this.factorId}">
-          -
+          <td data-choiceid="${this.data.choices.id}" data-factorid="${this.data.factors.id}">
+          ${this.data.choices.rank}
           </td>
         </tr>
         <tr>
