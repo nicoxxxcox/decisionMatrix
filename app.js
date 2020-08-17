@@ -210,21 +210,35 @@ class Table {
       columns[i].remove();
     }
   }
-  incrementRank() {
-    let table = document.getElementById("app");
 
-    table.addEventListener("click", function (e) {
+  incrementRank(e) {
+    let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
+    if (a < 3) {
+      a++;
+    } else {
+      a = 0;
+    }
+    e.target.innerHTML = a;
+  }
+
+  ListenEvents() {
+    let table = this.wrapper;
+    table.addEventListener("click", (e) => {
       if (
         e.target.hasAttribute("data-choiceid") &&
         e.target.hasAttribute("data-factorid")
       ) {
-        let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
-        if (a < 3) {
-          a++;
-        } else {
-          a = 0;
-        }
-        e.target.innerHTML = a;
+        this.incrementRank(e);
+      } else if (e.target === document.getElementById("addChoice-btn")) {
+        this.incrementChoiceId();
+        this.insertNewColumn();
+      } else if (e.target === document.getElementById("addFactor-btn")) {
+        this.incrementFactorId();
+        this.insertNewRow();
+      } else if (e.target.classList.contains("factor-btn__del")) {
+        this.deleteRow(e.target.parentNode);
+      } else if (e.target.classList.contains("choice-btn__del")) {
+        this.deleteColumn(e.target.parentNode.dataset.choiceid);
       }
     });
   }
@@ -257,36 +271,7 @@ class Table {
 
 const myTable = new Table("app");
 const main = function () {
-  let addFactorBtn = document.getElementById("addFactor-btn");
-  let addChoiceBtn = document.getElementById("addChoice-btn");
-  let factorbtndel = document.getElementsByClassName("factor-btn__del");
-  let choicebtndel = document.getElementsByClassName("choice-btn__del");
-
-  myTable.incrementRank();
-
-  addChoiceBtn.addEventListener("click", function () {
-    myTable.incrementChoiceId();
-    myTable.insertNewColumn();
-  });
-
-  addFactorBtn.addEventListener("click", function () {
-    myTable.incrementFactorId();
-    myTable.insertNewRow();
-  });
-
-  document.body.addEventListener("click", function (e) {
-    for (let i = 0; i < factorbtndel.length; i++) {
-      if (e.target == factorbtndel[i]) {
-        myTable.deleteRow(e.target.parentNode);
-      }
-    }
-
-    for (let i = 0; i < choicebtndel.length; i++) {
-      if (e.target == choicebtndel[i]) {
-        myTable.deleteColumn(e.target.parentNode.dataset.choiceid);
-      }
-    }
-  });
+  myTable.ListenEvents();
 };
 
 main();
