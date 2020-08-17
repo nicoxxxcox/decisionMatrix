@@ -231,26 +231,38 @@ class Table {
     e.target.innerHTML = a;
   }
 
-  ListenEvents() {
+  listenClickEvents() {
     let table = this.wrapper;
-    table.addEventListener("click", (e) => {
-      if (
-        e.target.hasAttribute("data-choiceid") &&
-        e.target.hasAttribute("data-factorid")
-      ) {
-        this.incrementRank(e);
-      } else if (e.target === document.getElementById("addChoice-btn")) {
-        this.incrementChoiceId();
-        this.insertNewColumn();
-      } else if (e.target === document.getElementById("addFactor-btn")) {
-        this.incrementFactorId();
-        this.insertNewRow();
-      } else if (e.target.classList.contains("factor-btn__del")) {
-        this.deleteRow(e.target.parentNode);
-      } else if (e.target.classList.contains("choice-btn__del")) {
-        this.deleteColumn(e.target.parentNode.dataset.choiceid);
-      }
-    });
+    table.addEventListener(
+      "click",
+      (e) => {
+        if (
+          e.target.hasAttribute("data-choiceid") &&
+          e.target.hasAttribute("data-factorid")
+        ) {
+          this.incrementRank(e);
+        } else if (e.target === document.getElementById("addChoice-btn")) {
+          this.incrementChoiceId();
+          this.insertNewColumn();
+        } else if (e.target === document.getElementById("addFactor-btn")) {
+          this.incrementFactorId();
+          this.insertNewRow();
+        } else if (e.target.classList.contains("factor-btn__del")) {
+          this.deleteRow(e.target.parentNode);
+        } else if (e.target.classList.contains("choice-btn__del")) {
+          this.deleteColumn(e.target.parentNode.dataset.choiceid);
+        } else if (e.target.classList.contains("factor-content")) {
+          e.target.addEventListener("input", function () {
+            console.log("contenteditable element changed");
+          });
+        } else if (e.target.classList.contains("choice-content")) {
+          e.target.addEventListener("input", function () {
+            console.log("contenteditable element changed");
+          });
+        }
+      },
+      true
+    );
   }
 
   countFactors() {
@@ -276,12 +288,13 @@ class Table {
   }
 }
 
-// =======================
+// ==============================================
+// ==============================================
 // Main program begin here
 
 const myTable = new Table("app");
 const main = function () {
-  myTable.ListenEvents();
+  myTable.listenClickEvents();
 };
 
 main();
