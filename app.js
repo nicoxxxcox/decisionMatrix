@@ -16,16 +16,20 @@ class Table {
     this.factorId = 0;
 
     this.data = {
-      choices: {
-        id: 0,
-        content: "Choix 0",
-        rank: "-",
-        rate: 0,
-      },
-      factors: {
-        id: 0,
-        content: "Facteur 0",
-      },
+      choices: [
+        {
+          id: 0,
+          content: "Choix 0",
+          rank: "-",
+          rate: 0,
+        },
+      ],
+      factors: [
+        {
+          id: 0,
+          content: "Facteur 0",
+        },
+      ],
     };
 
     this.initRender(this.wrapper);
@@ -37,19 +41,19 @@ class Table {
       <tbody>
         <tr>
           <td>#</td>
-          <td class="rank" data-choiceid="${this.data.choices.id}">
-            <div>${this.data.choices.rate}</div>
+          <td class="rank" data-choiceid="${this.data.choices[0].id}">
+            <div>${this.data.choices[0].rate}</div>
           </td>
           <td id="lastrankcol" class="add-col"></td>
         </tr>
         <tr>
           <td></td>
-          <td data-choiceid="${this.data.choices.id}"  class="choice cell">
+          <td data-choiceid="${this.data.choices[0].id}"  class="choice cell">
             <div
               class="choice-content text-center"
               contenteditable="true"
             >
-              ${this.data.choices.content}
+              ${this.data.choices[0].content}
             </div>
             <span class="choice-btn__del btn-del">Enlever</span>
           </td>
@@ -60,17 +64,17 @@ class Table {
           </td>
         </tr>
         <tr class="factorRow">
-          <td data-factorid="${this.data.factors.id}" class="factor cell">
+          <td data-factorid="${this.data.factors[0].id}" class="factor cell">
             <div
               class="factor-content text-center"
               contenteditable="true"
             >
-              ${this.data.factors.content}
+              ${this.data.factors[0].content}
             </div>
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
-          <td data-choiceid="${this.data.choices.id}" data-factorid="${this.data.factors.id}">
-          ${this.data.choices.rank}
+          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
+          ${this.data.choices[0].rank}
           </td>
         </tr>
         <tr>
@@ -153,6 +157,7 @@ class Table {
     let choiceCell = this.cloneCell(
       document.querySelector(".choice.cell[data-choiceid='0']")
     );
+
     choiceCell.dataset.choiceid = this.choiceId;
     choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
     return choiceCell;
@@ -173,6 +178,7 @@ class Table {
       document.querySelector(".rank[data-choiceid='0']")
     );
     cellRank.dataset.choiceid = this.choiceId;
+
     cellRank.firstElementChild.innerHTML = "0";
     return cellRank;
   }
@@ -193,11 +199,13 @@ class Table {
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
     let lastRow = document.querySelectorAll("tr");
+    this.setNewDataFactor();
     tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
   }
 
   insertNewColumn() {
     let rowCount = this.countFactors();
+    this.setNewDataChoice();
 
     let lastTdColumn = document.getElementById("lastrankcol");
     let addTdColumn = this.getSecondRow().lastElementChild;
@@ -260,6 +268,7 @@ class Table {
             console.log("contenteditable element changed");
           });
         }
+        console.log(this);
       },
       true
     );
@@ -286,6 +295,29 @@ class Table {
     let secondRow = document.querySelectorAll("tr")[2];
     return secondRow;
   }
+
+  setNewDataChoice() {
+    this.data.choices.push({
+      id: this.choiceId,
+      content: `Choix ${this.choiceId} `,
+      rank: "-",
+      rate: 0,
+    });
+  }
+  setNewDataFactor() {
+    this.data.factors.push({
+      id: this.factorId,
+      content: `Facteur ${this.factorId} `,
+    });
+  }
+
+  getContent(element) {}
+
+  setContent(element, content) {}
+
+  getRank(element) {}
+
+  setRank(element, rank) {}
 }
 
 // ==============================================
