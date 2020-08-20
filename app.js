@@ -20,14 +20,14 @@ class Table {
         {
           id: 0,
           content: "Choix 0",
-          rank: "-",
-          rate: 0,
-        },
-      ],
-      factors: [
-        {
-          id: 0,
-          content: "Facteur 0",
+          factors: [
+            {
+              id: 0,
+              content: "Facteur 0",
+              rank: "-",
+              rate: 0,
+            },
+          ],
         },
       ],
     };
@@ -42,7 +42,7 @@ class Table {
         <tr>
           <td>#</td>
           <td class="rank" data-choiceid="${this.data.choices[0].id}">
-            <div>${this.data.choices[0].rate}</div>
+            <div>${this.data.choices[0].factors[0].rate}</div>
           </td>
           <td id="lastrankcol" class="add-col"></td>
         </tr>
@@ -64,17 +64,17 @@ class Table {
           </td>
         </tr>
         <tr class="factorRow">
-          <td data-factorid="${this.data.factors[0].id}" class="factor cell">
+          <td data-factorid="${this.data.choices[0].factors[0].id}" class="factor cell">
             <div
               class="factor-content text-center"
               contenteditable="true"
             >
-              ${this.data.factors[0].content}
+              ${this.data.choices[0].factors[0].content}
             </div>
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
-          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
-          ${this.data.choices[0].rank}
+          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.choices[0].factors[0].id}">
+          ${this.data.choices[0].factors[0].rank}
           </td>
         </tr>
         <tr>
@@ -184,11 +184,10 @@ class Table {
   }
 
   createNewRow() {
-    let columnCount = this.countChoices();
     let newRow = this.createNewDOMELement("tr", "factorRow");
     newRow.appendChild(this.createFactorCell());
 
-    for (let i = 0; i < columnCount; i++) {
+    for (let i = 0; i < this.countChoices(); i++) {
       newRow.appendChild(this.createRateCell());
     }
 
@@ -199,13 +198,13 @@ class Table {
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
     let lastRow = document.querySelectorAll("tr");
-    this.setNewDataFactor();
+
     tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
+    this.setNewDataFactor();
   }
 
   insertNewColumn() {
     let rowCount = this.countFactors();
-    this.setNewDataChoice();
 
     let lastTdColumn = document.getElementById("lastrankcol");
     let addTdColumn = this.getSecondRow().lastElementChild;
@@ -215,6 +214,7 @@ class Table {
     this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
     for (let i = 0; i < rowCount; i++) {
       factorRow[i].appendChild(this.createRateCell());
+      this.setNewDataChoice();
     }
   }
 
@@ -237,6 +237,7 @@ class Table {
       a = 0;
     }
     e.target.innerHTML = a;
+    return a;
   }
 
   listenClickEvents() {
@@ -248,7 +249,7 @@ class Table {
           e.target.hasAttribute("data-choiceid") &&
           e.target.hasAttribute("data-factorid")
         ) {
-          this.incrementRank(e);
+          this.setRank(e.target, this.incrementRank(e));
         } else if (e.target === document.getElementById("addChoice-btn")) {
           this.incrementChoiceId();
           this.insertNewColumn();
@@ -295,20 +296,29 @@ class Table {
     let secondRow = document.querySelectorAll("tr")[2];
     return secondRow;
   }
-
   setNewDataChoice() {
     this.data.choices.push({
       id: this.choiceId,
       content: `Choix ${this.choiceId} `,
-      rank: "-",
-      rate: 0,
+      factors: [
+        {
+          id: this.factorId,
+          content: `Facteur ${this.factorId} `,
+          rank: "-",
+          rate: 0,
+        },
+      ],
     });
   }
   setNewDataFactor() {
-    this.data.factors.push({
-      id: this.factorId,
-      content: `Facteur ${this.factorId} `,
-    });
+    for (let i = 0; i < this.countChoices(); i++) {
+      this.data.choices[i].factors.push({
+        id: this.factorId,
+        content: `Facteur ${this.factorId} `,
+        rank: "-",
+        rate: 0,
+      });
+    }
   }
 
   getContent(element) {}
@@ -317,7 +327,11 @@ class Table {
 
   getRank(element) {}
 
-  setRank(element, rank) {}
+  setRank(element, rank) {
+    // this.data.choices[element.dataset.choiceid].factors[
+    //   element.dataset.factorid
+    // ].rank = rank;
+  }
 }
 
 // ==============================================
