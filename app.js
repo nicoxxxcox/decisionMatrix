@@ -260,16 +260,26 @@ class Table {
           this.deleteRow(e.target.parentNode);
         } else if (e.target.classList.contains("choice-btn__del")) {
           this.deleteColumn(e.target.parentNode.dataset.choiceid);
-        } else if (e.target.classList.contains("factor-content")) {
-          e.target.addEventListener("input", function () {
-            console.log("contenteditable element changed");
-          });
-        } else if (e.target.classList.contains("choice-content")) {
-          e.target.addEventListener("input", function () {
-            console.log("contenteditable element changed");
+        } else if (
+          e.target.classList.contains("factor-content") ||
+          e.target.classList.contains("choice-content")
+        ) {
+          e.target.addEventListener("input", () => {
+            if (e.target.parentNode.dataset.factorid) {
+              for (let i = 0; i < this.countChoices(); i++) {
+                this.data.choices[i].factors[
+                  e.target.parentNode.dataset.factorid
+                ].content = e.target.innerHTML.trim();
+              }
+            } else if (e.target.parentNode.dataset.choiceid) {
+              for (let i = 0; i < this.countFactors(); i++) {
+                this.data.choices[
+                  e.target.parentNode.dataset.choiceid
+                ].content = e.target.innerHTML.trim();
+              }
+            }
           });
         }
-        console.log(this);
       },
       true
     );
@@ -323,7 +333,11 @@ class Table {
 
   getContent(element) {}
 
-  setContent(element, content) {}
+  setContent(element, content) {
+    this.data.choices[i].factors[
+      e.target.parentNode.dataset.factorid
+    ].content = e.target.innerHTML.trim();
+  }
 
   getRank(element) {}
 
