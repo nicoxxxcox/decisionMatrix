@@ -342,9 +342,17 @@ class Table {
   getRank(element) {}
 
   setRank(element, rank) {
-    this.data.choices[element.dataset.choiceid].factors[
-      element.dataset.factorid
-    ].rank = rank;
+    if (
+      this.data.choices[element.dataset.choiceid].factors[
+        element.dataset.factorid
+      ]
+    ) {
+      this.data.choices[element.dataset.choiceid].factors[
+        element.dataset.factorid
+      ].rank = rank;
+    }
+
+    return;
   }
 }
 
