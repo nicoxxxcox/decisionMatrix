@@ -219,13 +219,17 @@ class Table {
   }
 
   deleteRow(row) {
-    row.parentNode.remove();
+    if (document.querySelectorAll("tr.factorRow").length > 1) {
+      row.parentNode.remove();
+    }
   }
 
   deleteColumn(column) {
-    let columns = document.querySelectorAll(`[data-choiceid='${column}']`);
-    for (let i = 0; i < columns.length; i++) {
-      columns[i].remove();
+    if (document.querySelectorAll(".choice").length > 1) {
+      let columns = document.querySelectorAll(`[data-choiceid='${column}']`);
+      for (let i = 0; i < columns.length; i++) {
+        columns[i].remove();
+      }
     }
   }
 
