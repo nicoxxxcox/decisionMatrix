@@ -30,13 +30,49 @@ class Table {
           ],
         },
       ],
+
+      setNewChoice: () => {
+        this.data.choices.push({
+          id: this.choiceId,
+          content: `Choix ${this.choiceId} `,
+          factors: [
+            {
+              id: this.factorId,
+              content: `Facteur ${this.factorId} `,
+              rank: "-",
+              rate: 0,
+            },
+          ],
+        });
+      },
+      setNewFactor: () => {
+        for (let i = 0; i < this.countChoices(); i++) {
+          this.data.choices[i].factors.push({
+            id: this.factorId,
+            content: `Facteur ${this.factorId} `,
+            rank: "-",
+            rate: 0,
+          });
+        }
+      },
+      setRank: (element, rank) => {
+        if (
+          this.data.choices[element.dataset.choiceid].factors[
+            element.dataset.factorid
+          ]
+        ) {
+          this.data.choices[element.dataset.choiceid].factors[
+            element.dataset.factorid
+          ].rank = rank;
+        }
+
+        return;
+      },
     };
 
-    this.initRender(this.wrapper);
-  }
-
-  getInitTemplate() {
-    return `
+    this.vue = {
+      getInitTemplate: () => {
+        return `
     <table class="table table-bordered table-responsive">
       <tbody>
         <tr>
@@ -89,13 +125,17 @@ class Table {
       </tbody>
     </table>
     `;
-  }
-  /**
-   * Insert the initial template inside wrapper elements
-   * @param {HTMLElement} wrapper
-   */
-  initRender(wrapper) {
-    wrapper.innerHTML = this.getInitTemplate();
+      },
+      /**
+       * Insert the initial template inside wrapper elements
+       * @param {HTMLElement} wrapper
+       */
+      initRender: (wrapper) => {
+        wrapper.innerHTML = this.vue.getInitTemplate();
+      },
+    };
+
+    this.vue.initRender(this.wrapper);
   }
 
   /**
@@ -194,16 +234,16 @@ class Table {
     return newRow;
   }
 
-  insertNewRow() {
+  insertNewRow = () => {
     // inserer juste avant le bouton ajouter la ligne de cellules
     let tbody = document.querySelector("tbody");
     let lastRow = document.querySelectorAll("tr");
 
     tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
-    this.setNewDataFactor();
-  }
+    this.data.setNewFactor();
+  };
 
-  insertNewColumn() {
+  insertNewColumn = () => {
     let rowCount = this.countFactors();
 
     let lastTdColumn = document.getElementById("lastrankcol");
@@ -214,9 +254,9 @@ class Table {
     this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
     for (let i = 0; i < rowCount; i++) {
       factorRow[i].appendChild(this.createRateCell());
-      this.setNewDataChoice();
+      this.data.setNewChoice();
     }
-  }
+  };
 
   deleteRow(row) {
     if (document.querySelectorAll("tr.factorRow").length > 1) {
@@ -253,7 +293,7 @@ class Table {
           e.target.hasAttribute("data-choiceid") &&
           e.target.hasAttribute("data-factorid")
         ) {
-          this.setRank(e.target, this.incrementRank(e));
+          this.data.setRank(e.target, this.incrementRank(e));
         } else if (e.target === document.getElementById("addChoice-btn")) {
           this.incrementChoiceId();
           this.insertNewColumn();
@@ -310,30 +350,6 @@ class Table {
     let secondRow = document.querySelectorAll("tr")[2];
     return secondRow;
   }
-  setNewDataChoice() {
-    this.data.choices.push({
-      id: this.choiceId,
-      content: `Choix ${this.choiceId} `,
-      factors: [
-        {
-          id: this.factorId,
-          content: `Facteur ${this.factorId} `,
-          rank: "-",
-          rate: 0,
-        },
-      ],
-    });
-  }
-  setNewDataFactor() {
-    for (let i = 0; i < this.countChoices(); i++) {
-      this.data.choices[i].factors.push({
-        id: this.factorId,
-        content: `Facteur ${this.factorId} `,
-        rank: "-",
-        rate: 0,
-      });
-    }
-  }
 
   getContent(element) {}
 
@@ -344,20 +360,6 @@ class Table {
   }
 
   getRank(element) {}
-
-  setRank(element, rank) {
-    if (
-      this.data.choices[element.dataset.choiceid].factors[
-        element.dataset.factorid
-      ]
-    ) {
-      this.data.choices[element.dataset.choiceid].factors[
-        element.dataset.factorid
-      ].rank = rank;
-    }
-
-    return;
-  }
 }
 
 // ==============================================
