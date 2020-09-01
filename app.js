@@ -55,6 +55,7 @@ class Table {
           });
         }
       },
+      deleteFactor : (id) => {},
       setRank: (element, rank) => {
         if (
           this.data.choices[element.dataset.choiceid].factors[
