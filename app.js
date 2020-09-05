@@ -55,7 +55,9 @@ class Table {
           });
         }
       },
-      deleteFactor : (id) => {},
+      deleteFactor: (id) => {
+        for (let i = 0; i < this.countChoices(); i++) {}
+      },
       setRank: (element, rank) => {
         if (
           this.data.choices[element.dataset.choiceid].factors[
@@ -187,7 +189,7 @@ class Table {
 
   createFactorCell() {
     let factorCell = this.cloneCell(
-      document.querySelector("[data-factorid='0']")
+      document.querySelector("td.factor[data-factorid='0']")
     );
     factorCell.dataset.factorid = this.factorId;
     factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
@@ -204,6 +206,7 @@ class Table {
     return choiceCell;
   }
 
+  // TODO : fix factorid creation
   createRateCell() {
     let cellRate = this.cloneCell(
       document.querySelector("[data-choiceid='0'][data-factorid='0']")
@@ -218,7 +221,8 @@ class Table {
     let cellRank = this.cloneCell(
       document.querySelector(".rank[data-choiceid='0']")
     );
-    cellRank.dataset.choiceid = this.choiceId;
+    cellRank.dataset.factorid = this.factorId;
+    //cellRank.dataset.choiceid = this.choiceId;
 
     cellRank.firstElementChild.innerHTML = "0";
     return cellRank;
@@ -229,6 +233,7 @@ class Table {
     newRow.appendChild(this.createFactorCell());
 
     for (let i = 0; i < this.countChoices(); i++) {
+      this.createRateCell().dataset.choiceid = i;
       newRow.appendChild(this.createRateCell());
     }
 
@@ -266,8 +271,8 @@ class Table {
   }
 
   deleteColumn(column) {
-    if (document.querySelectorAll(".choice").length > 1) {
-      let columns = document.querySelectorAll(`[data-choiceid='${column}']`);
+    if (document.querySelectorAll("td.choice").length > 1) {
+      let columns = document.querySelectorAll(`td[data-choiceid='${column}']`);
       for (let i = 0; i < columns.length; i++) {
         columns[i].remove();
       }
@@ -331,11 +336,11 @@ class Table {
   }
 
   countFactors() {
-    return document.getElementsByClassName("factor").length;
+    return this.data.choices[0].factors.length;
   }
 
   countChoices() {
-    return document.getElementsByClassName("choice").length;
+    return this.data.choices.length;
   }
 
   getFirstRow() {
