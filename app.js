@@ -56,7 +56,9 @@ class Table {
         }
       },
       deleteFactor: (id) => {
-        for (let i = 0; i < this.countChoices(); i++) {}
+        for (let i = 0; i < this.countChoices(); i++) {
+          this.data.choices[i].factors.splice(id, 1);
+        }
       },
       setRank: (element, rank) => {
         if (
@@ -267,6 +269,7 @@ class Table {
   deleteRow(row) {
     if (document.querySelectorAll("tr.factorRow").length > 1) {
       row.parentNode.remove();
+      this.data.deleteFactor(row.dataset.factorid);
     }
   }
 
@@ -345,6 +348,15 @@ class Table {
 
   getFirstRow() {
     return document.querySelector("tr");
+  }
+
+  getSecondRow() {
+    let secondRow = document.querySelectorAll("tr")[1];
+    return secondRow;
+  }
+  getThirdRow() {
+    let secondRow = document.querySelectorAll("tr")[2];
+    return secondRow;
   }
 
   getContent(element) {}
