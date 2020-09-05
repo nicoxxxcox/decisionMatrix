@@ -344,17 +344,7 @@ class Table {
   }
 
   getFirstRow() {
-    let firstRow = document.querySelector("tr");
-    return firstRow;
-  }
-
-  getSecondRow() {
-    let secondRow = document.querySelectorAll("tr")[1];
-    return secondRow;
-  }
-  getThirdRow() {
-    let secondRow = document.querySelectorAll("tr")[2];
-    return secondRow;
+    return document.querySelector("tr");
   }
 
   getContent(element) {}
