@@ -15,6 +15,32 @@ class Table {
     this.choiceId = 0;
     this.factorId = 0;
 
+    this.controler = {
+      /**
+       * Return and increment a new choice id
+       * @returns {Number}
+       */
+      incrementChoiceId: () => {
+        return this.choiceId++;
+      },
+
+      /**
+       * Return and increment a new factor id
+       * @returns {Number}
+       */
+      incrementFactorId: () => {
+        return this.factorId++;
+      },
+
+      countFactors: () => {
+        return this.data.choices[0].factors.length;
+      },
+
+      countChoices: () => {
+        return this.data.choices.length;
+      },
+    };
+
     this.data = {
       choices: [
         {
@@ -24,7 +50,7 @@ class Table {
             {
               id: 0,
               content: "Facteur 0",
-              rank: "-",
+              score: "-",
               rate: 0,
             },
           ],
@@ -39,28 +65,28 @@ class Table {
             {
               id: this.factorId,
               content: `Facteur ${this.factorId} `,
-              rank: "-",
+              score: "-",
               rate: 0,
             },
           ],
         });
       },
       setNewFactor: () => {
-        for (let i = 0; i < this.countChoices(); i++) {
+        for (let i = 0; i < this.controler.countChoices(); i++) {
           this.data.choices[i].factors.push({
             id: this.factorId,
             content: `Facteur ${this.factorId} `,
-            rank: "-",
+            score: "-",
             rate: 0,
           });
         }
       },
       deleteFactor: (id) => {
-        for (let i = 0; i < this.countChoices(); i++) {
+        for (let i = 0; i < this.controler.countChoices(); i++) {
           this.data.choices[i].factors.splice(id, 1);
         }
       },
-      setRank: (element, rank) => {
+      setScore: (element, score) => {
         if (
           this.data.choices[element.dataset.choiceid].factors[
             element.dataset.factorid
@@ -68,7 +94,7 @@ class Table {
         ) {
           this.data.choices[element.dataset.choiceid].factors[
             element.dataset.factorid
-          ].rank = rank;
+          ].score = score;
         }
 
         return;
@@ -82,10 +108,10 @@ class Table {
       <tbody>
         <tr>
           <td>#</td>
-          <td class="rank" data-choiceid="${this.data.choices[0].id}">
+          <td class="score" data-choiceid="${this.data.choices[0].id}">
             <div>${this.data.choices[0].factors[0].rate}</div>
           </td>
-          <td id="lastrankcol" class="add-col"></td>
+          <td id="lastscorecol" class="add-col"></td>
         </tr>
         <tr>
           <td></td>
@@ -115,7 +141,7 @@ class Table {
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
           <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.choices[0].factors[0].id}">
-          ${this.data.choices[0].factors[0].rank}
+          ${this.data.choices[0].factors[0].score}
           </td>
         </tr>
         <tr>
@@ -138,225 +164,198 @@ class Table {
       initRender: (wrapper) => {
         wrapper.innerHTML = this.vue.getInitTemplate();
       },
+
+      getFirstRow: () => {
+        return document.querySelector("tr");
+      },
+
+      getSecondRow: () => {
+        let secondRow = document.querySelectorAll("tr")[1];
+        return secondRow;
+      },
+      getThirdRow: () => {
+        let secondRow = document.querySelectorAll("tr")[2];
+        return secondRow;
+      },
+      cloneCell: (cell) => {
+        return cell.cloneNode(true);
+      },
+      createFactorCell: () => {
+        let factorCell = this.vue.cloneCell(
+          document.querySelector("td.factor[data-factorid='0']")
+        );
+        factorCell.dataset.factorid = this.factorId;
+        factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
+        return factorCell;
+      },
+      createChoiceCell: () => {
+        let choiceCell = this.vue.cloneCell(
+          document.querySelector(".choice.cell[data-choiceid='0']")
+        );
+
+        choiceCell.dataset.choiceid = this.choiceId;
+        choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
+        return choiceCell;
+      },
+      createRateCell: () => {
+        // TODO : fix factorid creation
+        let cellRate = this.vue.cloneCell(
+          document.querySelector("[data-choiceid='0'][data-factorid='0']")
+        );
+        cellRate.dataset.choiceid = this.choiceId;
+        cellRate.dataset.factorid = this.factorId;
+        cellRate.innerHTML = "-";
+        return cellRate;
+      },
+
+      createScoreCell: () => {
+        let cellScore = this.vue.cloneCell(
+          document.querySelector(".score[data-choiceid='0']")
+        );
+        cellScore.dataset.factorid = this.factorId;
+        //cellScore.dataset.choiceid = this.choiceId;
+
+        cellScore.firstElementChild.innerHTML = "0";
+        return cellScore;
+      },
+      createNewRow: () => {
+        let newRow = this.vue.createNewDOMELement("tr", "factorRow");
+        newRow.appendChild(this.vue.createFactorCell());
+
+        for (let i = 0; i < this.controler.countChoices(); i++) {
+          this.vue.createRateCell().dataset.choiceid = i;
+          newRow.appendChild(this.vue.createRateCell());
+        }
+
+        return newRow;
+      },
+      insertNewRow: () => {
+        // inserer juste avant le bouton ajouter la ligne de cellules
+        let tbody = document.querySelector("tbody");
+        let lastRow = document.querySelectorAll("tr");
+
+        tbody.insertBefore(
+          this.vue.createNewRow(),
+          lastRow[lastRow.length - 1]
+        );
+        this.data.setNewFactor();
+      },
+      insertNewColumn: () => {
+        let rowCount = this.controler.countFactors();
+
+        let lastTdColumn = document.getElementById("lastscorecol");
+        let addTdColumn = this.vue.getSecondRow().lastElementChild;
+        let factorRow = document.getElementsByClassName("factorRow");
+
+        this.vue
+          .getFirstRow()
+          .insertBefore(this.vue.createScoreCell(), lastTdColumn);
+        this.vue
+          .getSecondRow()
+          .insertBefore(this.vue.createChoiceCell(), addTdColumn);
+        for (let i = 0; i < rowCount; i++) {
+          factorRow[i].appendChild(this.vue.createRateCell());
+          this.data.setNewChoice();
+        }
+      },
+      deleteRow: (row) => {
+        if (document.querySelectorAll("tr.factorRow").length > 1) {
+          row.parentNode.remove();
+          this.data.deleteFactor(row.dataset.factorid);
+        }
+      },
+      deleteColumn: (column) => {
+        if (document.querySelectorAll("td.choice").length > 1) {
+          let columns = document.querySelectorAll(
+            `td[data-choiceid='${column}']`
+          );
+          for (let i = 0; i < columns.length; i++) {
+            columns[i].remove();
+          }
+        }
+      },
+      incrementScore: (e) => {
+        let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
+        if (a < 3) {
+          a++;
+        } else {
+          a = 0;
+        }
+        e.target.innerHTML = a;
+        return a;
+      },
+      listenClickEvents: () => {
+        let table = this.wrapper;
+        table.addEventListener(
+          "click",
+          (e) => {
+            if (
+              e.target.hasAttribute("data-choiceid") &&
+              e.target.hasAttribute("data-factorid")
+            ) {
+              this.data.setScore(e.target, this.vue.incrementScore(e));
+            } else if (e.target === document.getElementById("addChoice-btn")) {
+              this.controler.incrementChoiceId();
+              this.vue.insertNewColumn();
+            } else if (e.target === document.getElementById("addFactor-btn")) {
+              this.controler.incrementFactorId();
+              this.vue.insertNewRow();
+            } else if (e.target.classList.contains("factor-btn__del")) {
+              this.vue.deleteRow(e.target.parentNode);
+            } else if (e.target.classList.contains("choice-btn__del")) {
+              this.vue.deleteColumn(e.target.parentNode.dataset.choiceid);
+            } else if (
+              e.target.classList.contains("factor-content") ||
+              e.target.classList.contains("choice-content")
+            ) {
+              e.target.addEventListener("input", () => {
+                if (e.target.parentNode.dataset.factorid) {
+                  for (let i = 0; i < this.controler.countChoices(); i++) {
+                    this.data.choices[i].factors[
+                      e.target.parentNode.dataset.factorid
+                    ].content = e.target.innerHTML.trim();
+                  }
+                } else if (e.target.parentNode.dataset.choiceid) {
+                  for (let i = 0; i < this.controler.countFactors(); i++) {
+                    this.data.choices[
+                      e.target.parentNode.dataset.choiceid
+                    ].content = e.target.innerHTML.trim();
+                  }
+                }
+              });
+            }
+          },
+          true
+        );
+      },
+      /**
+       * Set new HTML Element with main properties
+       * @param {string} tag
+       * @param {string} classes
+       * @param {string} id
+       * @param {string} choiceid
+       * @param {string} factorid
+       */
+      createNewDOMELement: (tag = "div", classes, id, choiceid, factorid) => {
+        let newDOMELement = document.createElement(tag);
+        if (classes !== undefined) {
+          newDOMELement.setAttribute("class", classes);
+        }
+        if (id !== undefined) {
+          newDOMELement.setAttribute("id", id);
+        }
+        if (choiceid !== undefined) {
+          newDOMELement.dataset.choiceid = choiceid;
+        }
+        if (factorid !== undefined) {
+          newDOMELement.dataset.factorid = factorid;
+        }
+
+        return newDOMELement;
+      },
     };
 
     this.vue.initRender(this.wrapper);
-  }
-
-  /**
-   * Set new HTML Element with main properties
-   * @param {string} tag
-   * @param {string} classes
-   * @param {string} id
-   * @param {string} choiceid
-   * @param {string} factorid
-   */
-  createNewDOMELement(tag = "div", classes, id, choiceid, factorid) {
-    let newDOMELement = document.createElement(tag);
-    if (classes !== undefined) {
-      newDOMELement.setAttribute("class", classes);
-    }
-    if (id !== undefined) {
-      newDOMELement.setAttribute("id", id);
-    }
-    if (choiceid !== undefined) {
-      newDOMELement.dataset.choiceid = choiceid;
-    }
-    if (factorid !== undefined) {
-      newDOMELement.dataset.factorid = factorid;
-    }
-
-    return newDOMELement;
-  }
-
-  /**
-   * Return and increment a new choice id
-   * @returns {Number}
-   */
-  incrementChoiceId() {
-    return this.choiceId++;
-  }
-
-  /**
-   * Return and increment a new factor id
-   * @returns {Number}
-   */
-  incrementFactorId() {
-    return this.factorId++;
-  }
-
-  cloneCell(cell) {
-    return cell.cloneNode(true);
-  }
-
-  createFactorCell() {
-    let factorCell = this.cloneCell(
-      document.querySelector("td.factor[data-factorid='0']")
-    );
-    factorCell.dataset.factorid = this.factorId;
-    factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
-    return factorCell;
-  }
-
-  createChoiceCell() {
-    let choiceCell = this.cloneCell(
-      document.querySelector(".choice.cell[data-choiceid='0']")
-    );
-
-    choiceCell.dataset.choiceid = this.choiceId;
-    choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
-    return choiceCell;
-  }
-
-  // TODO : fix factorid creation
-  createRateCell() {
-    let cellRate = this.cloneCell(
-      document.querySelector("[data-choiceid='0'][data-factorid='0']")
-    );
-    cellRate.dataset.choiceid = this.choiceId;
-    cellRate.dataset.factorid = this.factorId;
-    cellRate.innerHTML = "-";
-    return cellRate;
-  }
-
-  createRankCell() {
-    let cellRank = this.cloneCell(
-      document.querySelector(".rank[data-choiceid='0']")
-    );
-    cellRank.dataset.factorid = this.factorId;
-    //cellRank.dataset.choiceid = this.choiceId;
-
-    cellRank.firstElementChild.innerHTML = "0";
-    return cellRank;
-  }
-
-  createNewRow() {
-    let newRow = this.createNewDOMELement("tr", "factorRow");
-    newRow.appendChild(this.createFactorCell());
-
-    for (let i = 0; i < this.countChoices(); i++) {
-      this.createRateCell().dataset.choiceid = i;
-      newRow.appendChild(this.createRateCell());
-    }
-
-    return newRow;
-  }
-
-  insertNewRow = () => {
-    // inserer juste avant le bouton ajouter la ligne de cellules
-    let tbody = document.querySelector("tbody");
-    let lastRow = document.querySelectorAll("tr");
-
-    tbody.insertBefore(this.createNewRow(), lastRow[lastRow.length - 1]);
-    this.data.setNewFactor();
-  };
-
-  insertNewColumn = () => {
-    let rowCount = this.countFactors();
-
-    let lastTdColumn = document.getElementById("lastrankcol");
-    let addTdColumn = this.getSecondRow().lastElementChild;
-    let factorRow = document.getElementsByClassName("factorRow");
-
-    this.getFirstRow().insertBefore(this.createRankCell(), lastTdColumn);
-    this.getSecondRow().insertBefore(this.createChoiceCell(), addTdColumn);
-    for (let i = 0; i < rowCount; i++) {
-      factorRow[i].appendChild(this.createRateCell());
-      this.data.setNewChoice();
-    }
-  };
-
-  deleteRow(row) {
-    if (document.querySelectorAll("tr.factorRow").length > 1) {
-      row.parentNode.remove();
-      this.data.deleteFactor(row.dataset.factorid);
-    }
-  }
-
-  deleteColumn(column) {
-    if (document.querySelectorAll("td.choice").length > 1) {
-      let columns = document.querySelectorAll(`td[data-choiceid='${column}']`);
-      for (let i = 0; i < columns.length; i++) {
-        columns[i].remove();
-      }
-    }
-  }
-
-  incrementRank(e) {
-    let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
-    if (a < 3) {
-      a++;
-    } else {
-      a = 0;
-    }
-    e.target.innerHTML = a;
-    return a;
-  }
-
-  listenClickEvents() {
-    let table = this.wrapper;
-    table.addEventListener(
-      "click",
-      (e) => {
-        if (
-          e.target.hasAttribute("data-choiceid") &&
-          e.target.hasAttribute("data-factorid")
-        ) {
-          this.data.setRank(e.target, this.incrementRank(e));
-        } else if (e.target === document.getElementById("addChoice-btn")) {
-          this.incrementChoiceId();
-          this.insertNewColumn();
-        } else if (e.target === document.getElementById("addFactor-btn")) {
-          this.incrementFactorId();
-          this.insertNewRow();
-        } else if (e.target.classList.contains("factor-btn__del")) {
-          this.deleteRow(e.target.parentNode);
-        } else if (e.target.classList.contains("choice-btn__del")) {
-          this.deleteColumn(e.target.parentNode.dataset.choiceid);
-        } else if (
-          e.target.classList.contains("factor-content") ||
-          e.target.classList.contains("choice-content")
-        ) {
-          e.target.addEventListener("input", () => {
-            if (e.target.parentNode.dataset.factorid) {
-              for (let i = 0; i < this.countChoices(); i++) {
-                this.data.choices[i].factors[
-                  e.target.parentNode.dataset.factorid
-                ].content = e.target.innerHTML.trim();
-              }
-            } else if (e.target.parentNode.dataset.choiceid) {
-              for (let i = 0; i < this.countFactors(); i++) {
-                this.data.choices[
-                  e.target.parentNode.dataset.choiceid
-                ].content = e.target.innerHTML.trim();
-              }
-            }
-          });
-        }
-      },
-      true
-    );
-  }
-
-  countFactors() {
-    return this.data.choices[0].factors.length;
-  }
-
-  countChoices() {
-    return this.data.choices.length;
-  }
-
-  getFirstRow() {
-    return document.querySelector("tr");
-  }
-
-  getSecondRow() {
-    let secondRow = document.querySelectorAll("tr")[1];
-    return secondRow;
-  }
-  getThirdRow() {
-    let secondRow = document.querySelectorAll("tr")[2];
-    return secondRow;
   }
 
   getContent(element) {}
@@ -367,7 +366,7 @@ class Table {
     ].content = e.target.innerHTML.trim();
   }
 
-  getRank(element) {}
+  getScore(element) {}
 }
 
 // ==============================================
@@ -376,7 +375,7 @@ class Table {
 
 const myTable = new Table("app");
 const main = function () {
-  myTable.listenClickEvents();
+  myTable.vue.listenClickEvents();
 };
 
 main();
