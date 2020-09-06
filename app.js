@@ -39,6 +39,50 @@ class Table {
       countChoices: () => {
         return this.data.choices.length;
       },
+      listenClickEvents: () => {
+        let table = this.wrapper;
+        table.addEventListener(
+          "click",
+          (e) => {
+            if (
+              e.target.hasAttribute("data-choiceid") &&
+              e.target.hasAttribute("data-factorid")
+            ) {
+              this.data.setScore(e.target, this.vue.incrementScore(e));
+            } else if (e.target === document.getElementById("addChoice-btn")) {
+              this.controler.incrementChoiceId();
+              this.vue.insertNewColumn();
+            } else if (e.target === document.getElementById("addFactor-btn")) {
+              this.controler.incrementFactorId();
+              this.vue.insertNewRow();
+            } else if (e.target.classList.contains("factor-btn__del")) {
+              this.vue.deleteRow(e.target.parentNode);
+            } else if (e.target.classList.contains("choice-btn__del")) {
+              this.vue.deleteColumn(e.target.parentNode.dataset.choiceid);
+            } else if (
+              e.target.classList.contains("factor-content") ||
+              e.target.classList.contains("choice-content")
+            ) {
+              e.target.addEventListener("input", () => {
+                if (e.target.parentNode.dataset.factorid) {
+                  for (let i = 0; i < this.controler.countChoices(); i++) {
+                    this.data.choices[i].factors[
+                      e.target.parentNode.dataset.factorid
+                    ].content = e.target.innerHTML.trim();
+                  }
+                } else if (e.target.parentNode.dataset.choiceid) {
+                  for (let i = 0; i < this.controler.countFactors(); i++) {
+                    this.data.choices[
+                      e.target.parentNode.dataset.choiceid
+                    ].content = e.target.innerHTML.trim();
+                  }
+                }
+              });
+            }
+          },
+          true
+        );
+      },
     };
 
     this.data = {
@@ -202,8 +246,6 @@ class Table {
         let cellRate = this.vue.cloneCell(
           document.querySelector("[data-choiceid='0'][data-factorid='0']")
         );
-        cellRate.dataset.choiceid = this.choiceId;
-        cellRate.dataset.factorid = this.factorId;
         cellRate.innerHTML = "-";
         return cellRate;
       },
@@ -222,10 +264,18 @@ class Table {
         let newRow = this.vue.createNewDOMELement("tr", "factorRow");
         newRow.appendChild(this.vue.createFactorCell());
 
-        for (let i = 0; i < this.controler.countChoices(); i++) {
-          this.vue.createRateCell().dataset.choiceid = i;
-          newRow.appendChild(this.vue.createRateCell());
-        }
+        this.data.setNewFactor();
+
+        this.data.choices.forEach((el, i) => {
+          let cell = this.vue.createRateCell();
+          cell.dataset.choiceid = el.id;
+
+          el.factors.forEach((ell, j) => {
+            cell.dataset.factorid = el.factors[j].id;
+          });
+
+          newRow.appendChild(cell);
+        });
 
         return newRow;
       },
@@ -238,7 +288,6 @@ class Table {
           this.vue.createNewRow(),
           lastRow[lastRow.length - 1]
         );
-        this.data.setNewFactor();
       },
       insertNewColumn: () => {
         let rowCount = this.controler.countFactors();
@@ -284,50 +333,7 @@ class Table {
         e.target.innerHTML = a;
         return a;
       },
-      listenClickEvents: () => {
-        let table = this.wrapper;
-        table.addEventListener(
-          "click",
-          (e) => {
-            if (
-              e.target.hasAttribute("data-choiceid") &&
-              e.target.hasAttribute("data-factorid")
-            ) {
-              this.data.setScore(e.target, this.vue.incrementScore(e));
-            } else if (e.target === document.getElementById("addChoice-btn")) {
-              this.controler.incrementChoiceId();
-              this.vue.insertNewColumn();
-            } else if (e.target === document.getElementById("addFactor-btn")) {
-              this.controler.incrementFactorId();
-              this.vue.insertNewRow();
-            } else if (e.target.classList.contains("factor-btn__del")) {
-              this.vue.deleteRow(e.target.parentNode);
-            } else if (e.target.classList.contains("choice-btn__del")) {
-              this.vue.deleteColumn(e.target.parentNode.dataset.choiceid);
-            } else if (
-              e.target.classList.contains("factor-content") ||
-              e.target.classList.contains("choice-content")
-            ) {
-              e.target.addEventListener("input", () => {
-                if (e.target.parentNode.dataset.factorid) {
-                  for (let i = 0; i < this.controler.countChoices(); i++) {
-                    this.data.choices[i].factors[
-                      e.target.parentNode.dataset.factorid
-                    ].content = e.target.innerHTML.trim();
-                  }
-                } else if (e.target.parentNode.dataset.choiceid) {
-                  for (let i = 0; i < this.controler.countFactors(); i++) {
-                    this.data.choices[
-                      e.target.parentNode.dataset.choiceid
-                    ].content = e.target.innerHTML.trim();
-                  }
-                }
-              });
-            }
-          },
-          true
-        );
-      },
+
       /**
        * Set new HTML Element with main properties
        * @param {string} tag
@@ -356,17 +362,18 @@ class Table {
     };
 
     this.vue.initRender(this.wrapper);
+    this.main();
   }
 
-  getContent(element) {}
+  main() {
+    this.controler.listenClickEvents();
+  }
 
   setContent(element, content) {
     this.data.choices[i].factors[
       e.target.parentNode.dataset.factorid
     ].content = e.target.innerHTML.trim();
   }
-
-  getScore(element) {}
 }
 
 // ==============================================
@@ -374,8 +381,3 @@ class Table {
 // Main program begin here
 
 const myTable = new Table("app");
-const main = function () {
-  myTable.vue.listenClickEvents();
-};
-
-main();
