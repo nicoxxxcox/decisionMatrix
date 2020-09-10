@@ -39,6 +39,10 @@ class Table {
       countChoices: () => {
         return this.data.choices.length;
       },
+      addFactor: () => {
+        this.data.setNewFactor();
+        this.vue.insertNewRow();
+      },
       listenClickEvents: () => {
         let table = this.wrapper;
         table.addEventListener(
@@ -51,10 +55,11 @@ class Table {
               this.data.setScore(e.target, this.vue.incrementScore(e));
             } else if (e.target === document.getElementById("addChoice-btn")) {
               this.controler.incrementChoiceId();
+
               this.vue.insertNewColumn();
             } else if (e.target === document.getElementById("addFactor-btn")) {
               this.controler.incrementFactorId();
-              this.vue.insertNewRow();
+              this.controler.addFactor();
             } else if (e.target.classList.contains("factor-btn__del")) {
               this.vue.deleteRow(e.target.parentNode);
             } else if (e.target.classList.contains("choice-btn__del")) {
@@ -90,17 +95,30 @@ class Table {
         {
           id: 0,
           content: "Choix 0",
-          factors: [
-            {
-              id: 0,
-              content: "Facteur 0",
-              score: "-",
-              rate: 0,
-            },
-          ],
+          factors: [0],
         },
       ],
-
+      factors: [
+        {
+          id: 0,
+          content: "Factor 0",
+          score: "-",
+          rate: 0,
+          choicesId: 0,
+        },
+      ],
+      setChoice: (choice) => {
+        this.data.choices.push(choice);
+      },
+      getChoice: (id) => {
+        return this.data.choices.find((choice) => choice.id == id);
+      },
+      setFactor: (factor) => {
+        this.data.factors.push(factor);
+      },
+      getFactor: (id) => {
+        return this.data.factors.find((factor) => factor.id == id);
+      },
       setNewChoice: () => {
         this.data.choices.push({
           id: this.choiceId,
@@ -264,23 +282,16 @@ class Table {
         let newRow = this.vue.createNewDOMELement("tr", "factorRow");
         newRow.appendChild(this.vue.createFactorCell());
 
-        this.data.setNewFactor();
-
-        this.data.choices.forEach((el, i) => {
+        this.data.choices.forEach((el) => {
           let cell = this.vue.createRateCell();
           cell.dataset.choiceid = el.id;
-
-          el.factors.forEach((ell, j) => {
-            cell.dataset.factorid = el.factors[j].id;
-          });
-
+          cell.dataset.factorid = el.factors[el.factors.lenght - 1].id;
           newRow.appendChild(cell);
         });
 
         return newRow;
       },
       insertNewRow: () => {
-        // inserer juste avant le bouton ajouter la ligne de cellules
         let tbody = document.querySelector("tbody");
         let lastRow = document.querySelectorAll("tr");
 
