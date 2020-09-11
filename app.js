@@ -12,8 +12,8 @@ class Table {
     }
     this.wrapper = document.getElementById(this.el);
 
-    this.choiceId = 0;
-    this.factorId = 0;
+    this.data.choicesCount = 0;
+    this.data.factorsCount = 0;
 
     this.controler = {
       /**
@@ -21,7 +21,7 @@ class Table {
        * @returns {Number}
        */
       incrementChoiceId: () => {
-        return this.choiceId++;
+        return this.data.choicesCount++;
       },
 
       /**
@@ -29,7 +29,7 @@ class Table {
        * @returns {Number}
        */
       incrementFactorId: () => {
-        return this.factorId++;
+        return this.data.factorsCount++;
       },
 
       countFactors: () => {
@@ -91,11 +91,13 @@ class Table {
     };
 
     this.data = {
+      choicesCount : 0,
+      factorsCount : 0,
       choices: [
         {
           id: 0,
           content: "Choix 0",
-          factors: [0],
+          visible: true,
         },
       ],
       factors: [
@@ -104,6 +106,7 @@ class Table {
           content: "Factor 0",
           score: "-",
           rate: 0,
+          visible: true,
           choicesId: 0,
         },
       ],
@@ -119,47 +122,20 @@ class Table {
       getFactor: (id) => {
         return this.data.factors.find((factor) => factor.id == id);
       },
-      setNewChoice: () => {
-        this.data.choices.push({
-          id: this.choiceId,
-          content: `Choix ${this.choiceId} `,
-          factors: [
-            {
-              id: this.factorId,
-              content: `Facteur ${this.factorId} `,
-              score: "-",
-              rate: 0,
-            },
-          ],
+
+      deleteFactor: (id) => {
+        this.data.factors.forEach((factor) => {
+          if (factor.id == id) {
+            factor.visible = false;
+          }
         });
       },
-      setNewFactor: () => {
-        for (let i = 0; i < this.controler.countChoices(); i++) {
-          this.data.choices[i].factors.push({
-            id: this.factorId,
-            content: `Facteur ${this.factorId} `,
-            score: "-",
-            rate: 0,
-          });
-        }
-      },
-      deleteFactor: (id) => {
-        for (let i = 0; i < this.controler.countChoices(); i++) {
-          this.data.choices[i].factors.splice(id, 1);
-        }
-      },
-      setScore: (element, score) => {
-        if (
-          this.data.choices[element.dataset.choiceid].factors[
-            element.dataset.factorid
-          ]
-        ) {
-          this.data.choices[element.dataset.choiceid].factors[
-            element.dataset.factorid
-          ].score = score;
-        }
-
-        return;
+      setScore: (factorId, score) => {
+        this.data.factors.forEach((factor) => {
+          if (factor.id == factorId) {
+            factor.score = score;
+          }
+        });
       },
     };
 
@@ -171,7 +147,7 @@ class Table {
         <tr>
           <td>#</td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
-            <div>${this.data.choices[0].factors[0].rate}</div>
+            <div>${this.data.factors[0].rate}</div>
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -193,17 +169,17 @@ class Table {
           </td>
         </tr>
         <tr class="factorRow">
-          <td data-factorid="${this.data.choices[0].factors[0].id}" class="factor cell">
+          <td data-factorid="${this.data.factors[0].id}" class="factor cell">
             <div
               class="factor-content text-center"
               contenteditable="true"
             >
-              ${this.data.choices[0].factors[0].content}
+              ${this.data.factors[0].content}
             </div>
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
-          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.choices[0].factors[0].id}">
-          ${this.data.choices[0].factors[0].score}
+          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
+          ${this.data.factors[0].score}
           </td>
         </tr>
         <tr>
@@ -246,8 +222,8 @@ class Table {
         let factorCell = this.vue.cloneCell(
           document.querySelector("td.factor[data-factorid='0']")
         );
-        factorCell.dataset.factorid = this.factorId;
-        factorCell.firstElementChild.innerHTML = `Facteur ${this.factorId}`;
+        factorCell.dataset.factorid = this.data.factorsCount;
+        factorCell.firstElementChild.innerHTML = `Facteur ${this.data.factorsCount}`;
         return factorCell;
       },
       createChoiceCell: () => {
@@ -255,8 +231,8 @@ class Table {
           document.querySelector(".choice.cell[data-choiceid='0']")
         );
 
-        choiceCell.dataset.choiceid = this.choiceId;
-        choiceCell.firstElementChild.innerHTML = `Choix ${this.choiceId}`;
+        choiceCell.dataset.choiceid = this.data.choicesCount;
+        choiceCell.firstElementChild.innerHTML = `Choix ${this.data.choicesCount}`;
         return choiceCell;
       },
       createRateCell: () => {
@@ -272,8 +248,8 @@ class Table {
         let cellScore = this.vue.cloneCell(
           document.querySelector(".score[data-choiceid='0']")
         );
-        cellScore.dataset.factorid = this.factorId;
-        //cellScore.dataset.choiceid = this.choiceId;
+        cellScore.dataset.factorid = this.data.factorsCount;
+        //cellScore.dataset.choiceid = this.data.choicesCount;
 
         cellScore.firstElementChild.innerHTML = "0";
         return cellScore;
