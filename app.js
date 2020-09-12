@@ -12,8 +12,8 @@ class Table {
     }
     this.wrapper = document.getElementById(this.el);
 
-    this.data.choicesCount = 0;
-    this.data.factorsCount = 0;
+    //-------------
+    //--- CONTROLER
 
     this.controler = {
       /**
@@ -33,14 +33,14 @@ class Table {
       },
 
       countFactors: () => {
-        return this.data.choices[0].factors.length;
+        return this.data.factors.length;
       },
 
       countChoices: () => {
         return this.data.choices.length;
       },
       addFactor: () => {
-        this.data.setNewFactor();
+        this.data.setFactor();
         this.vue.insertNewRow();
       },
       listenClickEvents: () => {
@@ -90,9 +90,12 @@ class Table {
       },
     };
 
+    //----------
+    //--- DATA
+
     this.data = {
-      choicesCount : 0,
-      factorsCount : 0,
+      choicesCount: 0,
+      factorsCount: 0,
       choices: [
         {
           id: 0,
@@ -107,7 +110,7 @@ class Table {
           score: "-",
           rate: 0,
           visible: true,
-          choicesId: 0,
+          choiceId: 0,
         },
       ],
       setChoice: (choice) => {
@@ -116,28 +119,64 @@ class Table {
       getChoice: (id) => {
         return this.data.choices.find((choice) => choice.id == id);
       },
+      getAllChoices: () => {
+        return this.data.choices;
+      },
       setFactor: (factor) => {
         this.data.factors.push(factor);
       },
       getFactor: (id) => {
         return this.data.factors.find((factor) => factor.id == id);
       },
-
-      deleteFactor: (id) => {
+      getAllFactors: () => {
+        return this.data.factors;
+      },
+      setFactorVisible: (id) => {
         this.data.factors.forEach((factor) => {
-          if (factor.id == id) {
+          if (factor.id == id && factor.visible == false) {
+            factor.visible = true;
+          }
+        });
+      },
+
+      setFactorInvisible: (id) => {
+        this.data.factors.forEach((factor) => {
+          if (factor.id == id && factor.visible == true) {
             factor.visible = false;
           }
         });
       },
+      setChoiceVisible: (id) => {
+        this.data.choices.forEach((choice) => {
+          if (choice.id == id && choice.visible == false) {
+            choice.visible = true;
+          }
+        });
+      },
+
+      setChoiceInvisible: (id) => {
+        this.data.choices.forEach((choice) => {
+          if (choice.id == id && choice.visible == true) {
+            choice.visible = false;
+          }
+        });
+      },
+      // TODO: filter with factors and choices
+      getScore: (id) => {
+        return this.data.factors.find((factor) => factor.id == id);
+      },
+      // TODO: filter with factors and choices
       setScore: (factorId, score) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == factorId) {
             factor.score = score;
-          }
+          } else return;
         });
       },
     };
+
+    //----------
+    //--- VUE
 
     this.vue = {
       getInitTemplate: () => {
@@ -258,10 +297,10 @@ class Table {
         let newRow = this.vue.createNewDOMELement("tr", "factorRow");
         newRow.appendChild(this.vue.createFactorCell());
 
-        this.data.choices.forEach((el) => {
+        this.data.choices.forEach((choice) => {
           let cell = this.vue.createRateCell();
-          cell.dataset.choiceid = el.id;
-          cell.dataset.factorid = el.factors[el.factors.lenght - 1].id;
+          cell.dataset.choiceid = choice.id;
+          cell.dataset.factorid = this.data.factorsCount;
           newRow.appendChild(cell);
         });
 
@@ -291,13 +330,13 @@ class Table {
           .insertBefore(this.vue.createChoiceCell(), addTdColumn);
         for (let i = 0; i < rowCount; i++) {
           factorRow[i].appendChild(this.vue.createRateCell());
-          this.data.setNewChoice();
+          this.data.setChoice();
         }
       },
       deleteRow: (row) => {
         if (document.querySelectorAll("tr.factorRow").length > 1) {
           row.parentNode.remove();
-          this.data.deleteFactor(row.dataset.factorid);
+          this.data.setFactorInvisible(row.dataset.factorid);
         }
       },
       deleteColumn: (column) => {
