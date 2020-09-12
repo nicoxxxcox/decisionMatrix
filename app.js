@@ -20,7 +20,7 @@ class Table {
        * Return and increment a new choice id
        * @returns {Number}
        */
-      incrementChoiceId: () => {
+      incrementChoicesCount: () => {
         return this.data.choicesCount++;
       },
 
@@ -28,7 +28,7 @@ class Table {
        * Return and increment a new factor id
        * @returns {Number}
        */
-      incrementFactorId: () => {
+      incrementFactorsCount: () => {
         return this.data.factorsCount++;
       },
 
@@ -39,9 +39,28 @@ class Table {
       countChoices: () => {
         return this.data.choices.length;
       },
+
       addFactor: () => {
-        this.data.setFactor();
+        this.controler.incrementFactorsCount();
+        this.data.choices.forEach((choice) => {
+          this.data.setFactor({
+            id: this.data.factorsCount,
+            content: `Factor ${this.data.factorsCount}`,
+            score: "-",
+            rate: 0,
+            visible: true,
+            choiceId: choice.id,
+          });
+        });
+
         this.vue.insertNewRow();
+      },
+      /**
+       * Insert the initial template inside wrapper elements
+       * @param {HTMLElement} wrapper
+       */
+      initRender: (wrapper) => {
+        wrapper.innerHTML = this.vue.getInitTemplate();
       },
       listenClickEvents: () => {
         let table = this.wrapper;
@@ -54,11 +73,10 @@ class Table {
             ) {
               this.data.setScore(e.target, this.vue.incrementScore(e));
             } else if (e.target === document.getElementById("addChoice-btn")) {
-              this.controler.incrementChoiceId();
+              this.controler.incrementChoicesCount();
 
               this.vue.insertNewColumn();
             } else if (e.target === document.getElementById("addFactor-btn")) {
-              this.controler.incrementFactorId();
               this.controler.addFactor();
             } else if (e.target.classList.contains("factor-btn__del")) {
               this.vue.deleteRow(e.target.parentNode);
@@ -107,30 +125,58 @@ class Table {
         {
           id: 0,
           content: "Factor 0",
-          score: "-",
           rate: 0,
           visible: true,
           choiceId: 0,
         },
       ],
-      setChoice: (choice) => {
-        this.data.choices.push(choice);
-      },
+      factorScore: [
+        {
+          factorId: 0,
+          choicesId: 0,
+          score: 0,
+        },
+      ],
       getChoice: (id) => {
         return this.data.choices.find((choice) => choice.id == id);
       },
+
+      /**
+       * return all choices
+       * @returns {Array}
+       */
       getAllChoices: () => {
         return this.data.choices;
       },
-      setFactor: (factor) => {
-        this.data.factors.push(factor);
-      },
+
       getFactor: (id) => {
         return this.data.factors.find((factor) => factor.id == id);
       },
+
+      /**
+       * return all factors
+       * @returns {Array}
+       */
       getAllFactors: () => {
         return this.data.factors;
       },
+
+      /**
+       * set a new choice
+       * @param {Object} choice
+       */
+      setChoice: (choice) => {
+        this.data.choices.push(choice);
+      },
+
+      /**
+       * set a new factor
+       * @param {Object} factor
+       */
+      setFactor: (factor) => {
+        this.data.factors.push(factor);
+      },
+
       setFactorVisible: (id) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == id && factor.visible == false) {
@@ -162,13 +208,15 @@ class Table {
         });
       },
       // TODO: filter with factors and choices
-      getScore: (id) => {
-        return this.data.factors.find((factor) => factor.id == id);
+      getScore: (factorId, choiceId) => {
+        return this.data.factors.find(
+          (factor) => factor.id == factorId && factor.choiceId == choiceId
+        );
       },
       // TODO: filter with factors and choices
-      setScore: (factorId, score) => {
+      setScore: (factorId, choiceId, score) => {
         this.data.factors.forEach((factor) => {
-          if (factor.id == factorId) {
+          if (factor.id == factorId && factor.choiceId == choiceId) {
             factor.score = score;
           } else return;
         });
@@ -233,13 +281,6 @@ class Table {
       </tbody>
     </table>
     `;
-      },
-      /**
-       * Insert the initial template inside wrapper elements
-       * @param {HTMLElement} wrapper
-       */
-      initRender: (wrapper) => {
-        wrapper.innerHTML = this.vue.getInitTemplate();
       },
 
       getFirstRow: () => {
@@ -387,7 +428,7 @@ class Table {
       },
     };
 
-    this.vue.initRender(this.wrapper);
+    this.controler.initRender(this.wrapper);
     this.main();
   }
 
