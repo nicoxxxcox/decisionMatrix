@@ -42,16 +42,17 @@ class Table {
 
       addFactor: () => {
         this.controler.incrementFactorsCount();
+
         this.data.setFactor({
           id: this.data.factorsCount,
           content: `Factor ${this.data.factorsCount}`,
           rate: 0,
           visible: true,
-          factorsScore: [],
+          factorsRate: [],
         });
 
         this.data.choices.forEach((c) => {
-          this.data.setFactorScore(this.data.factorsCount, c.choiceId, 0);
+          this.data.setFactorRate(this.data.factorsCount, c.id, 0);
         });
 
         this.vue.insertNewRow();
@@ -65,7 +66,21 @@ class Table {
           visible: true,
         });
 
+        this.data.factors.forEach((f) => {
+          this.data.setFactorRate(f.id, this.data.choicesCount, 0);
+        });
+
         this.vue.insertNewColumn();
+      },
+
+      deleteFactor: (el) => {
+        this.data.setFactorInvisible(el.dataset.factorid);
+        this.vue.deleteRow(el);
+      },
+      deleteChoice: (el) => {
+        this.data.setChoiceInvisible(el.dataset.choiceid);
+
+        this.vue.deleteColumn(el.dataset.choiceid);
       },
       /**
        * Insert the initial template inside wrapper elements
@@ -83,15 +98,19 @@ class Table {
               e.target.hasAttribute("data-choiceid") &&
               e.target.hasAttribute("data-factorid")
             ) {
-              this.data.setScore(e.target, this.vue.incrementScore(e));
+              this.data.setRate(
+                e.target.dataset.factorid,
+                e.target.dataset.choiceid,
+                this.vue.incrementRate(e)
+              );
             } else if (e.target === document.getElementById("addChoice-btn")) {
               this.controler.addChoice();
             } else if (e.target === document.getElementById("addFactor-btn")) {
               this.controler.addFactor();
             } else if (e.target.classList.contains("factor-btn__del")) {
-              this.vue.deleteRow(e.target.parentNode);
+              this.controler.deleteFactor(e.target.parentNode);
             } else if (e.target.classList.contains("choice-btn__del")) {
-              this.vue.deleteColumn(e.target.parentNode.dataset.choiceid);
+              this.controler.deleteChoice(e.target.parentNode);
             } else if (
               e.target.classList.contains("factor-content") ||
               e.target.classList.contains("choice-content")
@@ -137,10 +156,11 @@ class Table {
           content: "Factor 0",
           rate: 0,
           visible: true,
-          factorsScore: [
+          score: 0,
+          factorsRate: [
             {
               choiceId: 0,
-              score: "-",
+              rate: "-",
             },
           ],
         },
@@ -169,12 +189,12 @@ class Table {
       getAllFactors: () => {
         return this.data.factors;
       },
-      getFactorScore: (fid, cid) => {
+      getFactorRate: (fid, cid) => {
         let result;
         this.data.factors.forEach((factor) => {
-          factor.factorsScore.forEach((score) => {
-            if (factor.id == fid && score.choiceId == cid) {
-              result = score;
+          factor.factorsRate.forEach((rate) => {
+            if (factor.id == fid && rate.choiceId == cid) {
+              result = rate;
             }
           });
         });
@@ -197,16 +217,28 @@ class Table {
         this.data.factors.push(factor);
       },
       /**
-       * set new factor score
-       * @param {Object} factorScore
+       * set new factor rate
+       * @param {Object} factorRate
+       *
+       * TODO : just set rate if object already exist
        */
-      setFactorScore: (fid, cid, score) => {
+      setFactorRate: (fid, cid, rate) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == fid) {
-            console.log(factor);
-            factor.factorsScore.push({
+            factor.factorsRate.push({
               choiceId: cid,
-              score: score,
+              rate: rate,
+            });
+          }
+        });
+      },
+      setRate: (fid, cid, scor) => {
+        this.data.factors.forEach((factor) => {
+          if (factor.id == fid) {
+            factor.factorsRate.forEach((rate) => {
+              if (rate.choiceId == cid) {
+                rate.rate = scor;
+              }
             });
           }
         });
@@ -255,7 +287,7 @@ class Table {
         <tr>
           <td>#</td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
-            <div>${this.data.factors[0].rate}</div>
+            <div>${this.data.factors[0].score}</div>
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -287,7 +319,7 @@ class Table {
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
           <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
-          ${this.data.factors[0].factorsScore[0].score}
+          -
           </td>
         </tr>
         <tr>
@@ -337,7 +369,6 @@ class Table {
         return choiceCell;
       },
       createRateCell: () => {
-        // TODO : fix factorid creation
         let cellRate = this.vue.cloneCell(
           document.querySelector("[data-choiceid='0'][data-factorid='0']")
         );
@@ -349,7 +380,7 @@ class Table {
         let cellScore = this.vue.cloneCell(
           document.querySelector(".score[data-choiceid='0']")
         );
-        cellScore.dataset.factorid = this.data.factorsCount;
+        cellScore.dataset.choiceid = this.data.choicesCount;
 
         cellScore.firstElementChild.innerHTML = "0";
         return cellScore;
@@ -376,9 +407,8 @@ class Table {
           lastRow[lastRow.length - 1]
         );
       },
-      insertNewColumn: () => {
-        let rowCount = this.controler.countFactors();
 
+      insertNewColumn: () => {
         let lastTdColumn = document.getElementById("lastscorecol");
         let addTdColumn = this.vue.getSecondRow().lastElementChild;
         let factorRow = document.getElementsByClassName("factorRow");
@@ -389,8 +419,12 @@ class Table {
         this.vue
           .getSecondRow()
           .insertBefore(this.vue.createChoiceCell(), addTdColumn);
-        for (let i = 0; i < rowCount; i++) {
-          factorRow[i].appendChild(this.vue.createRateCell());
+
+        for (let row of factorRow) {
+          let cell = this.vue.createRateCell();
+          cell.dataset.choiceid = this.data.choicesCount;
+          cell.dataset.factorid = this.data.factorsCount;
+          row.appendChild(cell);
         }
       },
       deleteRow: (row) => {
@@ -408,7 +442,7 @@ class Table {
           }
         }
       },
-      incrementScore: (e) => {
+      incrementRate: (e) => {
         let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
         if (a < 3) {
           a++;
