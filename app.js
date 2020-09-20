@@ -63,6 +63,7 @@ class Table {
         this.data.setChoice({
           id: this.data.choicesCount,
           content: `Choix ${this.data.choicesCount}`,
+          score: 0,
           visible: true,
         });
 
@@ -82,6 +83,21 @@ class Table {
 
         this.vue.deleteColumn(el.dataset.choiceid);
       },
+      updateScore: (e) => {
+        this.data.setRate(
+          e.target.dataset.factorid,
+          e.target.dataset.choiceid,
+          this.vue.incrementRate(e)
+        );
+        this.data.setScore();
+
+        this.data.choices.forEach((c) => {
+          if (c.id == e.target.dataset.choiceid) {
+            this.vue.updateScore(e.target.dataset.choiceid, c.score);
+          }
+        });
+      },
+
       /**
        * Insert the initial template inside wrapper elements
        * @param {HTMLElement} wrapper
@@ -98,11 +114,7 @@ class Table {
               e.target.hasAttribute("data-choiceid") &&
               e.target.hasAttribute("data-factorid")
             ) {
-              this.data.setRate(
-                e.target.dataset.factorid,
-                e.target.dataset.choiceid,
-                this.vue.incrementRate(e)
-              );
+              this.controler.updateScore(e);
             } else if (e.target === document.getElementById("addChoice-btn")) {
               this.controler.addChoice();
             } else if (e.target === document.getElementById("addFactor-btn")) {
@@ -147,6 +159,7 @@ class Table {
         {
           id: 0,
           content: "Choix 0",
+          score: 0,
           visible: true,
         },
       ],
@@ -156,11 +169,11 @@ class Table {
           content: "Factor 0",
           rate: 0,
           visible: true,
-          score: 0,
+
           factorsRate: [
             {
               choiceId: 0,
-              rate: "-",
+              rate: 0,
             },
           ],
         },
@@ -274,6 +287,25 @@ class Table {
           }
         });
       },
+
+      setScore: () => {
+        function add(array) {
+          return array.reduce((a, b) => a + b);
+        }
+
+        this.data.choices.forEach((c) => {
+          let l = 0;
+
+          this.data.factors.forEach((f) => {
+            f.factorsRate.forEach((r) => {
+              if (r.choiceId === c.id) {
+                l += r.rate;
+              }
+            });
+          });
+          c.score = l;
+        });
+      },
     };
 
     //----------
@@ -287,7 +319,7 @@ class Table {
         <tr>
           <td>#</td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
-            <div>${this.data.factors[0].score}</div>
+            <div>${this.data.choices[0].score}</div>
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -441,6 +473,10 @@ class Table {
             columns[i].remove();
           }
         }
+      },
+      updateScore: (id, score) => {
+        let cellScore = document.querySelector(`.score[data-choiceid='${id}']`);
+        cellScore.firstElementChild.innerHTML = score;
       },
       incrementRate: (e) => {
         let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
