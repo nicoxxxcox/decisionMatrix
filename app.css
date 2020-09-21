@@ -47,3 +47,21 @@
   font-size: 80%;
   cursor: pointer;
 }
+
+.score {
+  position: relative;
+
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.5) 1px 1px 1px;
+}
+.progress {
+  position: absolute;
+  top: -67%;
+  width: 70%;
+  height: 50%;
+  z-index: -1;
+  transform-origin: center;
+  transform: rotate(-90deg) translate(-100%, -31%);
+}

@@ -314,12 +314,13 @@ class Table {
     this.vue = {
       getInitTemplate: () => {
         return `
-    <table class="table table-bordered table-responsive">
+    <table class="table table-borderless table-responsive">
       <tbody>
         <tr>
           <td>#</td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
             <div>${this.data.choices[0].score}</div>
+            <progress id="score" class="progress" value="${this.data.choices[0].score}" max="9"></progress>
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -350,7 +351,7 @@ class Table {
             </div>
             <span class="factor-btn__del btn-del">Enlever</span>
           </td>
-          <td data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
+          <td class="rate" data-choiceid="${this.data.choices[0].id}" data-factorid="${this.data.factors[0].id}">
           -
           </td>
         </tr>
@@ -477,6 +478,7 @@ class Table {
       updateScore: (id, score) => {
         let cellScore = document.querySelector(`.score[data-choiceid='${id}']`);
         cellScore.firstElementChild.innerHTML = score;
+        cellScore.lastElementChild.value = score;
       },
       incrementRate: (e) => {
         let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
