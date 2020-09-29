@@ -323,7 +323,7 @@ class Table {
     this.vue = {
       getInitTemplate: () => {
         return `
-    <table class="table table-borderless table-responsive">
+    <table class="table table-bordered table-responsive">
       <tbody>
         <tr>
           <td>#</td>
@@ -339,8 +339,7 @@ class Table {
             <div
               class="choice-content text-center"
               contenteditable="true"
-            >
-              ${this.data.choices[0].content}
+            >${this.data.choices[0].content}
             </div>
             <span class="choice-btn__del btn-del">Enlever</span>
           </td>
