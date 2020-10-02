@@ -112,7 +112,10 @@ class Table {
           }
         });
       },
-
+      updateBestChoice: () => {
+        console.log(this.data.getBestChoice());
+        this.vue.renderBestChoice(this.data.getBestChoice().content);
+      },
       /**
        * Insert the initial template inside wrapper elements
        * @param {HTMLElement} wrapper
@@ -130,6 +133,7 @@ class Table {
               e.target.hasAttribute("data-factorid")
             ) {
               this.controler.updateScore(e);
+              this.controler.updateBestChoice();
             } else if (e.target === document.getElementById("addChoice-btn")) {
               this.controler.addChoice();
             } else if (e.target === document.getElementById("addFactor-btn")) {
@@ -145,8 +149,10 @@ class Table {
               e.target.addEventListener("input", () => {
                 if (e.target.parentNode.dataset.factorid) {
                   this.controler.updateFactorContent(e);
+                  this.controler.updateBestChoice();
                 } else if (e.target.parentNode.dataset.choiceid) {
                   this.controler.updateChoiceContent(e);
+                  this.controler.updateBestChoice();
                 }
               });
             }
@@ -223,6 +229,11 @@ class Table {
         return result;
       },
 
+      getBestChoice: () => {
+        return this.data.choices.reduce((prev, current) =>
+          prev.score > current.score ? prev : current
+        );
+      },
       /**
        * set a new choice
        * @param {Object} choice
@@ -328,8 +339,8 @@ class Table {
         <tr>
           <td>#</td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
-            <div>${this.data.choices[0].score}</div>
-            <progress id="score" class="progress" value="${this.data.choices[0].score}" max="9"></progress>
+            <div class="score__content">${this.data.choices[0].score}</div>
+            
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -507,6 +518,14 @@ class Table {
         return a;
       },
 
+      /**
+       * @param {String} choiceContent
+       */
+      renderBestChoice: (choiceContent) => {
+        let resultfield = document.getElementById("best-choice");
+
+        resultfield.innerText = `THe best choice is : ${choiceContent}`;
+      },
       /**
        * Set new HTML Element with main properties
        * @param {string} tag
