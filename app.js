@@ -113,8 +113,12 @@ class Table {
         });
       },
       updateBestChoice: () => {
-        console.log(this.data.getBestChoice());
-        this.vue.renderBestChoice(this.data.getBestChoice().content);
+        let content = this.data
+          .getBestChoice()
+          .map((c) => c.content)
+          .join(" / ");
+
+        this.vue.renderBestChoice(content);
       },
       /**
        * Insert the initial template inside wrapper elements
@@ -229,10 +233,17 @@ class Table {
         return result;
       },
 
+      /**
+       *  @returns {Array}
+       */
       getBestChoice: () => {
-        return this.data.choices.reduce((prev, current) =>
-          prev.score > current.score ? prev : current
-        );
+        let high = this.data.choices
+          .filter((c) => c.visible === true)
+          .reduce((prev, current, i, arr) =>
+            prev.score > current.score ? prev : current
+          );
+
+        return this.data.choices.filter((c) => c.score === high.score);
       },
       /**
        * set a new choice
@@ -524,7 +535,7 @@ class Table {
       renderBestChoice: (choiceContent) => {
         let resultfield = document.getElementById("best-choice");
 
-        resultfield.innerText = `THe best choice is : ${choiceContent}`;
+        resultfield.innerText = `The best choice is : ${choiceContent}`;
       },
       /**
        * Set new HTML Element with main properties
