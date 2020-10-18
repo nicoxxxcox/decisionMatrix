@@ -31,7 +31,7 @@ main {
  */
 h1 {
   font-size: 2em;
-  margin: 0.67em 0; }
+  margin: .67em 0; }
 
 /* Grouping content
    ========================================================================== */
@@ -40,12 +40,12 @@ h1 {
  * 2. Show the overflow in Edge and IE.
  */
 hr {
+  overflow: visible;
+  /* 2 */
   box-sizing: content-box;
   /* 1 */
   height: 0;
-  /* 1 */
-  overflow: visible;
-  /* 2 */ }
+  /* 1 */ }
 
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
@@ -70,12 +70,12 @@ a {
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
 abbr[title] {
-  border-bottom: none;
-  /* 1 */
   text-decoration: underline;
   /* 2 */
   text-decoration: underline dotted;
-  /* 2 */ }
+  /* 2 */
+  border-bottom: none;
+  /* 1 */ }
 
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
@@ -114,10 +114,10 @@ sup {
   vertical-align: baseline; }
 
 sub {
-  bottom: -0.25em; }
+  bottom: -.25em; }
 
 sup {
-  top: -0.5em; }
+  top: -.5em; }
 
 /* Embedded content
    ========================================================================== */
@@ -169,35 +169,35 @@ select {
  * Correct the inability to style clickable types in iOS and Safari.
  */
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
+[type='button'],
+[type='reset'],
+[type='submit'] {
   -webkit-appearance: button; }
 
 /**
  * Remove the inner border and padding in Firefox.
  */
 button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
-  border-style: none;
-  padding: 0; }
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+  padding: 0;
+  border-style: none; }
 
 /**
  * Restore the focus styles unset by the previous rule.
  */
 button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring {
   outline: 1px dotted ButtonText; }
 
 /**
  * Correct the padding in Firefox.
  */
 fieldset {
-  padding: 0.35em 0.75em 0.625em; }
+  padding: .35em .75em .625em; }
 
 /**
  * 1. Correct the text wrapping in Edge and IE.
@@ -206,18 +206,18 @@ fieldset {
  *    `fieldset` elements in all browsers.
  */
 legend {
-  box-sizing: border-box;
-  /* 1 */
-  color: inherit;
-  /* 2 */
   display: table;
+  /* 1 */
+  box-sizing: border-box;
   /* 1 */
   max-width: 100%;
   /* 1 */
   padding: 0;
   /* 3 */
   white-space: normal;
-  /* 1 */ }
+  /* 1 */
+  color: inherit;
+  /* 2 */ }
 
 /**
  * Add the correct vertical alignment in Chrome, Firefox, and Opera.
@@ -235,8 +235,8 @@ textarea {
  * 1. Add the correct box sizing in IE 10.
  * 2. Remove the padding in IE 10.
  */
-[type="checkbox"],
-[type="radio"] {
+[type='checkbox'],
+[type='radio'] {
   box-sizing: border-box;
   /* 1 */
   padding: 0;
@@ -245,24 +245,24 @@ textarea {
 /**
  * Correct the cursor style of increment and decrement buttons in Chrome.
  */
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
   height: auto; }
 
 /**
  * 1. Correct the odd appearance in Chrome and Safari.
  * 2. Correct the outline style in Safari.
  */
-[type="search"] {
-  -webkit-appearance: textfield;
-  /* 1 */
+[type='search'] {
   outline-offset: -2px;
-  /* 2 */ }
+  /* 2 */
+  -webkit-appearance: textfield;
+  /* 1 */ }
 
 /**
  * Remove the inner padding in Chrome and Safari on macOS.
  */
-[type="search"]::-webkit-search-decoration {
+[type='search']::-webkit-search-decoration {
   -webkit-appearance: none; }
 
 /**
@@ -270,10 +270,10 @@ textarea {
  * 2. Change font properties to `inherit` in Safari.
  */
 ::-webkit-file-upload-button {
-  -webkit-appearance: button;
-  /* 1 */
   font: inherit;
-  /* 2 */ }
+  /* 2 */
+  -webkit-appearance: button;
+  /* 1 */ }
 
 /* Interactive
    ========================================================================== */
@@ -307,13 +307,13 @@ body {
   font-family: "Epilogue", sans-serif; }
 
 .choice-btn__del {
-  position: absolute;
-  left: 3px;
-  top: 3px;
   font-size: 0.7rem;
-  color: transparent;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  cursor: pointer;
   transition: all 300ms;
-  cursor: pointer; }
+  color: transparent; }
 
 .choice:hover > .choice-btn__del {
   color: red; }
@@ -322,13 +322,13 @@ body {
   min-width: 15rem; }
 
 .factor-btn__del {
-  position: absolute;
-  left: 3px;
-  top: 3px;
   font-size: 0.7rem;
-  color: transparent;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  cursor: pointer;
   transition: all 300ms;
-  cursor: pointer; }
+  color: transparent; }
 
 .factor:hover > .btn-del,
 .choice:hover > .btn-del {
@@ -344,14 +344,15 @@ body {
 
 #addFactor-btn,
 #addChoice-btn {
-  color: #6c757d;
   font-size: 80%;
-  cursor: pointer; }
+  cursor: pointer;
+  color: #6c757d; }
 
 /*-------------
 -- FONTS
 ---------------*/
-.choice, .factor {
+.choice,
+.factor {
   font-weight: 600; }
 
 .factor {
@@ -371,30 +372,30 @@ body {
   background-color: #f1f1f1; }
 
 .wrapper {
+  overflow: auto;
   max-width: 1440px;
   margin: 0 auto;
   padding: 3rem;
-  border-radius: 1rem;
-  overflow: auto;
   white-space: nowrap;
+  border-radius: 1rem;
   background-color: #fff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; }
+  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px; }
 
 /*-------------
 -- TABLE
 ---------------*/
 table {
-  border-collapse: separate;
-  border-spacing: 1.1rem; }
+  border-spacing: 1.1rem;
+  border-collapse: separate; }
 
 tbody tr td {
-  border-bottom: 2px dotted #E0E0E0; }
+  border-bottom: 2px dotted #e0e0e0; }
 
 tbody tr:nth-child(1) td {
   border-bottom: inherit; }
 
 tbody tr:nth-child(2) td {
-  border-bottom: 2px solid #E0E0E0; }
+  border-bottom: 2px solid #e0e0e0; }
 
 tbody tr:last-child td {
   border-bottom: inherit; }
@@ -404,18 +405,43 @@ tbody tr:last-child td {
 ---------------*/
 .btn {
   display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  vertical-align: middle;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   user-select: none;
-  background-color: transparent;
+  transition: all ease-in-out 300ms;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
   border: 2px solid transparent;
-  padding: .5rem 1rem;
   border-radius: 4px;
-  transition: all ease-in-out 300ms; }
+  background-color: transparent; }
 
 .btn:hover {
   text-decoration: none; }
+
+/*-------------
+-- SCORE
+---------------*/
+.score__content {
+  line-height: 2rem;
+  position: relative;
+  z-index: 1;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  color: white; }
+  .score__content::before {
+    font-weight: bold;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 2rem;
+    height: 2rem;
+    content: "";
+    border-radius: 50px;
+    background-color: #c6f6d5; }
 
 /*# sourceMappingURL=app.css.map */
