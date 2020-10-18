@@ -345,13 +345,13 @@ class Table {
     this.vue = {
       getInitTemplate: () => {
         return `
-    <table class="table table-bordered table-responsive">
+    <table class="table table-responsive">
       <tbody>
         <tr>
-          <td>#</td>
+          <td></td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
             <div class="score__content">${this.data.choices[0].score}</div>
-            
+
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>

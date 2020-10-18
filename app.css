@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Epilogue", sans-serif;
 }
@@ -50,4 +56,93 @@ body {
   color: #6c757d;
   font-size: 80%;
   cursor: pointer;
+}
+
+/*-------------
+-- FONTS
+---------------*/
+
+
+.choice,.factor{
+  font-weight: 600;
+}
+
+.factor {
+  text-align: left;
+}
+
+.choice {
+  text-align: center;
+}
+
+.rate{
+  text-align: center;
+  color :#bdbdbd;
+}
+
+/*-------------
+-- LAYOUT
+---------------*/
+.wrapper-body{
+  background-color: #f1f1f1;
+}
+
+.wrapper{
+
+  max-width: 1440px;
+  margin : 0 auto;
+  padding : 3rem;
+  border-radius: 1rem;
+  overflow: auto;
+  white-space: nowrap;
+
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+}
+
+/*-------------
+-- TABLE
+---------------*/
+
+table{
+  border-collapse: separate;
+  border-spacing: 1.1rem;
+}
+
+
+tbody tr td {
+  border-bottom: 2px dotted #E0E0E0;
+}
+tbody tr:nth-child(1) td {
+  border-bottom: inherit;
+}
+tbody tr:nth-child(2) td {
+  border-bottom: 2px solid #E0E0E0;
+}
+tbody tr:last-child td {
+  border-bottom: inherit;
+}
+
+/*-------------
+-- COMPONENTS
+---------------*/
+
+.btn{
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 2px solid transparent;
+  padding : .5rem 1rem;
+  border-radius: 4px;
+
+  transition: all ease-in-out 300ms;
+}
+.btn:hover{
+
+  text-decoration: none;
 }
