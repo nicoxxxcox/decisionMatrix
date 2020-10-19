@@ -7,7 +7,7 @@ const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 const browserSync = require("browser-sync").create();
 const uglify = require("gulp-uglify");
-const babel = require('gulp-babel');
+const babel = require("gulp-babel");
 
 //====== What's the folder to watch and reload ?
 
@@ -22,59 +22,56 @@ const distFolder = "dist/";
 //Compile, prefix and minifify scss
 function scssTask() {
   return src(
-    srcFolder+"scss/*.scss",
-    { since: lastRun(scssTask) },
+    srcFolder + "scss/*.scss",
     { sourcemaps: true }
   )
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(sourcemaps.write("."))
-    .pipe(dest(distFolder+"css/"))
+    .pipe(dest(distFolder + "css/"))
     .pipe(browserSync.stream());
 }
-
 
 //Compile, prefix and minifify scss for production
 function scssTaskProd() {
   return src(
-    srcFolder+"scss/*.scss",
-    { since: lastRun(scssTask) },
+    srcFolder + "scss/*.scss",
     { sourcemaps: true }
   )
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(postcss([autoprefixer(), cssnano]))
     .pipe(sourcemaps.write("."))
-    .pipe(dest(distFolder+"css/"))
+    .pipe(dest(distFolder + "css/"))
     .pipe(browserSync.stream());
 }
 
 // compile uglify and replace js
 function jsTask() {
-  return src(srcFolder+"js/*.js")
-    .pipe(babel({
-      presets: ['@babel/env']
-      }))
+  return src(srcFolder + "js/*.js")
+    .pipe(
+      babel({
+        presets: ["@babel/env"],
+      })
+    )
     .pipe(uglify())
-    .pipe(dest(distFolder+"js/"))
+    .pipe(dest(distFolder + "js/"))
     .pipe(browserSync.stream());
 }
 
-
 // replace html
 function htmlTask() {
-  return src(srcFolder+"*.html").pipe(dest(distFolder));
-
+  return src(srcFolder + "*.html").pipe(dest(distFolder));
 }
 
 function watchTask() {
   browserSync.init({
     server: {
-      baseDir: distFolder
-    }
+      baseDir: distFolder,
+    },
   });
   watch(
-    [srcFolder+`scss/*.scss` , srcFolder+"*.html", srcFolder+"js/*.js"],
+    [srcFolder + `scss/*.scss`, srcFolder + "*.html", srcFolder + "js/*.js"],
     series(htmlTask, scssTask, jsTask)
   ).on("change", browserSync.reload);
 }
@@ -82,8 +79,8 @@ function watchTask() {
 function watchTaskProduction() {
   browserSync.init({
     server: {
-      baseDir: distFolder
-    }
+      baseDir: distFolder,
+    },
   });
   watch(
     ["*.scss", "*.html", "*.js"],

@@ -1,7 +1,11 @@
 @import "normalize";
+@import "variables";
+@import "colors";
+@import "backgrounds";
+@import "buttons";
 
 body {
-  font-family: "Epilogue", sans-serif;
+  font-family: "Sora", sans-serif;
 }
 
 .choice-btn__del {
@@ -19,7 +23,7 @@ body {
 }
 
 .factor.cell {
-  min-width: 15rem;
+  //min-width: 5rem;
 }
 
 .factor-btn__del {
@@ -47,28 +51,18 @@ body {
   padding: 2rem;
 }
 
-#addFactor-btn,
-#addChoice-btn {
-  font-size: 80%;
-  cursor: pointer;
-  color: #6c757d;
-}
-
 /*-------------
 -- FONTS
 ---------------*/
 
-.choice,
-.factor {
-  font-weight: 600;
-}
-
 .factor {
   text-align: left;
+  font-size: 0.875rem;
 }
 
 .choice {
   text-align: center;
+  font-size: 0.875rem;
 }
 
 .rate {
@@ -79,11 +73,20 @@ body {
 /*-------------
 -- LAYOUT
 ---------------*/
-.wrapper-body {
-  background-color: #f1f1f1;
+body {
+  background-color: $gray;
 }
 
-.wrapper {
+.wrapper-body {
+  padding: 0 1rem;
+  height: 100%;
+}
+
+.wrapper-app {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 3rem;
+  border-radius: 1rem;
   overflow: auto;
   max-width: 1440px;
   margin: 0 auto;
@@ -91,7 +94,7 @@ body {
   white-space: nowrap;
   border-radius: 1rem;
   background-color: #fff;
-  box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 /*-------------
@@ -99,6 +102,7 @@ body {
 ---------------*/
 
 table {
+  border-collapse: separate;
   border-spacing: 1.1rem;
   border-collapse: separate;
 }
@@ -120,22 +124,14 @@ tbody tr:last-child td {
 -- COMPONENTS
 ---------------*/
 
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-
+#addFactor-btn,
+#addChoice-btn {
+  //@extend .btn;
+  @extend .btn-outline__green;
+  @extend .plus-icon__green;
+  color: #6c757d;
+  font-size: 0.625rem;
   cursor: pointer;
-  user-select: none;
-  transition: all ease-in-out 300ms;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  border: 2px solid transparent;
-  border-radius: 4px;
-  background-color: transparent;
-}
-.btn:hover {
-  text-decoration: none;
 }
 
 /*-------------
