@@ -1,53 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decision Matrix</title>
+    <!-- CSS only -->
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decision Matrix</title>
-  <!-- CSS only -->
-
-  <!-- <link
+    <!-- <link
       rel="stylesheet"
       href="./node_modules/bootstrap/dist/css/bootstrap.min.css"
     /> -->
-  <!-- <link
+    <!-- <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
       crossorigin="anonymous"
     /> -->
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;400;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css" />
-  <script src="js/app.js" defer></script>
-</head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@200;400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="js/app.js" defer></script>
+  </head>
 
-<body>
-  <div class="wrapper-body">
-    <div class="container">
-      <div class="display-2 mb-5">
-        <h1>
-          Decision Matrix
-        </h1>
+  <body>
+    <div class="wrapper-body">
+      <div class="title-container">
+        <h1 class="title">Decision Matrix</h1>
+      </div>
+
+      <div class="result-container">
+        <div id="best-choice" class="lead">The best choice is :</div>
+      </div>
+
+      <div class="wrapper-app">
+        <div id="app"></div>
       </div>
     </div>
-
-    <div class="container-fluid wrapper-app my-3">
-      <div class="row mb-3">
-        <div class="col">
-          <div id="app"></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <div id="best-choice" class="lead">The best choice is :</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-</body>
-
+  </body>
 </html>
