@@ -15,7 +15,7 @@
   color: $gray-800;
   padding: 0.3rem 0.8rem;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 400;
 
   transition: all ease-in-out 200ms;
 
@@ -33,8 +33,7 @@
   }
 }
 
-
-.btn-outline{
+.btn-outline {
   @extend .btn;
   background-color: transparent;
   color: $gray-500;
@@ -53,12 +52,12 @@
   }
 }
 
-.btn-outline__green{
+.btn-outline__green {
   @extend .btn;
   background-color: transparent;
   color: $gray-500;
   border: 2px solid $green-200;
-  color: $green-500 ;
+  color: $green-500;
 
   &:hover {
     text-decoration: none;
@@ -74,39 +73,95 @@
   }
 }
 
+.btn-outline__red {
+  @extend .btn;
+  background-color: transparent;
+  color: $red-500;
+  border: 2px solid $red-200;
+  color: $red-500;
 
-.plus-icon{
-  &::before{
+  &:hover {
+    text-decoration: none;
+    background-color: $red-200;
+    border: 2px solid $red-200;
+    color: $red-500;
+  }
+  &:active {
+    text-decoration: none;
+    background-color: $green-300;
+    border: 2px solid $green-300;
+    color: $green-500;
+  }
+}
+
+.plus-icon {
+  &::before {
     position: absolute;
     content: "+";
-    font-size: .8rem;
-    line-height: .9rem ;
-    width: .9rem;
-    height: .9rem;
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
     background-color: $gray-400;
     border-radius: 50px;
     border: 2p;
-    top : -30%;
+    top: -30%;
     left: -9%;
-    color:white;
+    color: white;
     //border: 2px solid $gray-400;
   }
 }
 
-.plus-icon__green{
-  &::before{
+.minus-icon {
+  &::before {
+    position: absolute;
+    content: "-";
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: $gray-400;
+    border-radius: 50px;
+    border: 2p;
+    top: -30%;
+    left: -9%;
+    color: white;
+    //border: 2px solid $gray-400;
+  }
+}
+
+.minus-icon__red {
+  &::before {
+    position: absolute;
+    content: "-";
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    background-color: $red-400;
+    border-radius: 50px;
+    border: 2p;
+    top: -30%;
+    left: -9%;
+    color: white;
+    //border: 2px solid $gray-400;
+  }
+}
+
+.plus-icon__green {
+  &::before {
     position: absolute;
     content: "+";
-    font-size: .8rem;
-    line-height: .9rem ;
-    width: .9rem;
-    height: .9rem;
+    font-size: 0.8rem;
+    line-height: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
     background-color: $green-400;
     border-radius: 50px;
     border: 2p;
-    top : -30%;
+    top: -30%;
     left: -9%;
-    color:white;
+    color: white;
     //border: 2px solid $green-400;
   }
 }
