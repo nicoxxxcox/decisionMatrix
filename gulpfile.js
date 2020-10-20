@@ -21,10 +21,7 @@ const distFolder = "dist/";
 
 //Compile, prefix and minifify scss
 function scssTask() {
-  return src(
-    srcFolder + "scss/*.scss",
-    { sourcemaps: true }
-  )
+  return src(srcFolder + "scss/*.scss", { sourcemaps: true })
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(sourcemaps.write("."))
@@ -34,10 +31,7 @@ function scssTask() {
 
 //Compile, prefix and minifify scss for production
 function scssTaskProd() {
-  return src(
-    srcFolder + "scss/*.scss",
-    { sourcemaps: true }
-  )
+  return src(srcFolder + "scss/*.scss", { sourcemaps: true })
     .pipe(sourcemaps.init())
     .pipe(sass())
     .pipe(postcss([autoprefixer(), cssnano]))
@@ -49,12 +43,14 @@ function scssTaskProd() {
 // compile uglify and replace js
 function jsTask() {
   return src(srcFolder + "js/*.js")
+    .pipe(sourcemaps.init())
     .pipe(
       babel({
         presets: ["@babel/env"],
       })
     )
     .pipe(uglify())
+    .pipe(sourcemaps.write("."))
     .pipe(dest(distFolder + "js/"))
     .pipe(browserSync.stream());
 }

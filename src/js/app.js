@@ -271,7 +271,7 @@ class Table {
 
       getFactorRate: (factorId, ChoiceId) => {
         let result;
-        this.data.factors.forEach((factor) => {
+         this.data.factors.forEach((factor) => {
           factor.factorsRate.forEach((rate) => {
             if (factor.id === factorId && rate.choiceId === ChoiceId) {
               result = rate;
