@@ -114,7 +114,7 @@ class Table {
       updateFactorContent: (e) => {
         this.data.factors[
           e.target.parentNode.dataset.factorid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
 
       /**
@@ -123,7 +123,7 @@ class Table {
       updateChoiceContent: (e) => {
         this.data.choices[
           e.target.parentNode.dataset.choiceid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
 
       /**
@@ -641,7 +641,9 @@ class Table {
       renderBestChoice: (choiceContent) => {
         const resultfield = document.getElementById("best-choice");
 
-        resultfield.innerText = `The best choice is : ${choiceContent}`;
+        const cleanChoiceContent = choiceContent.replace(/\r?\n|\r/g, "");
+
+        resultfield.innerText = `The best choice is : ${cleanChoiceContent}`;
       },
 
       /**
