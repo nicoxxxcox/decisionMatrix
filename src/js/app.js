@@ -32,14 +32,23 @@ class Table {
         return this.data.lastFactorId++;
       },
 
+      /**
+       * @returns {Number}
+       */
       countFactors: () => {
         return this.data.factors.filter((f) => f.visible === true).length;
       },
 
+      /**
+       * @returns {Number}
+       */
       countChoices: () => {
         return this.data.choices.filter((c) => c.visible === true).length;
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       addFactor: () => {
         this.controler.incrementLastFactorId();
 
@@ -51,7 +60,7 @@ class Table {
           factorsRate: [],
         });
 
-        let sortChoices = this.data.choices.filter((c) => c.visible === true);
+        const sortChoices = this.data.choices.filter((c) => c.visible === true);
 
         sortChoices.forEach((c) => {
           this.data.setFactorRate(this.data.lastFactorId, c.id, 0);
@@ -60,6 +69,9 @@ class Table {
         this.vue.insertNewRow();
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       addChoice: () => {
         this.controler.incrementLastChoiceId();
 
@@ -79,25 +91,44 @@ class Table {
         this.vue.insertNewColumn();
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       deleteFactor: (el) => {
         this.data.setFactorInvisible(el.dataset.factorid);
         this.vue.deleteRow(el);
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       deleteChoice: (el) => {
         this.data.setChoiceInvisible(el.dataset.choiceid);
 
         this.vue.deleteColumn(el.dataset.choiceid);
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       updateFactorContent: (e) => {
         this.data.factors[
           e.target.parentNode.dataset.factorid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       updateChoiceContent: (e) => {
         this.data.choices[
           e.target.parentNode.dataset.choiceid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       updateScore: (e) => {
         this.data.setRate(
           e.target.dataset.factorid,
@@ -112,21 +143,31 @@ class Table {
           }
         });
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       updateBestChoice: () => {
-        let content = this.data
+        const content = this.data
           .getBestChoice()
           .map((c) => c.content)
           .join(" / ");
 
         this.vue.renderBestChoice(content);
       },
+
       /**
        * Insert the initial template inside wrapper elements
        * @param {HTMLElement} wrapper
+       * @returns {VoidFunction}
        */
       initRender: (wrapper) => {
         wrapper.innerHTML = this.vue.getInitTemplate();
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       listenClickEvents: () => {
         let table = this.wrapper;
         table.addEventListener(
@@ -198,8 +239,11 @@ class Table {
         },
       ],
 
+      /**
+       * @returns {Object}
+       */
       getChoice: (id) => {
-        return this.data.choices.find((choice) => choice.id == id);
+        return this.data.choices.find((choice) => choice.id === id);
       },
 
       /**
@@ -210,6 +254,9 @@ class Table {
         return this.data.choices;
       },
 
+      /**
+       * @returns {Object}
+       */
       getFactor: (id) => {
         return this.data.factors.find((factor) => factor.id == id);
       },
@@ -221,11 +268,12 @@ class Table {
       getAllFactors: () => {
         return this.data.factors;
       },
-      getFactorRate: (fid, cid) => {
+
+      getFactorRate: (factorId, ChoiceId) => {
         let result;
         this.data.factors.forEach((factor) => {
           factor.factorsRate.forEach((rate) => {
-            if (factor.id == fid && rate.choiceId == cid) {
+            if (factor.id === factorId && rate.choiceId === ChoiceId) {
               result = rate;
             }
           });
@@ -237,14 +285,15 @@ class Table {
        *  @returns {Array}
        */
       getBestChoice: () => {
-        let high = this.data.choices
+        const high = this.data.choices
           .filter((c) => c.visible === true)
-          .reduce((prev, current, i, arr) =>
+          .reduce((prev, current) =>
             prev.score > current.score ? prev : current
           );
 
         return this.data.choices.filter((c) => c.score === high.score);
       },
+
       /**
        * set a new choice
        * @param {Object} choice
@@ -260,6 +309,7 @@ class Table {
       setFactor: (factor) => {
         this.data.factors.push(factor);
       },
+
       /**
        * set new factor rate
        * @param {Object} factorRate
@@ -276,6 +326,7 @@ class Table {
           }
         });
       },
+
       setRate: (fid, cid, scor) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == fid) {
@@ -288,6 +339,9 @@ class Table {
         });
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       setFactorVisible: (id) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == id && factor.visible == false) {
@@ -296,6 +350,9 @@ class Table {
         });
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       setFactorInvisible: (id) => {
         this.data.factors.forEach((factor) => {
           if (factor.id == id && factor.visible == true) {
@@ -303,6 +360,10 @@ class Table {
           }
         });
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       setChoiceVisible: (id) => {
         this.data.choices.forEach((choice) => {
           if (choice.id == id && choice.visible == false) {
@@ -310,7 +371,9 @@ class Table {
           }
         });
       },
-
+      /**
+       * @returns {VoidFunction}
+       */
       setChoiceInvisible: (id) => {
         this.data.choices.forEach((choice) => {
           if (choice.id == id && choice.visible == true) {
@@ -319,6 +382,9 @@ class Table {
         });
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       setScore: () => {
         function add(array) {
           return array.reduce((a, b) => a + b);
@@ -399,23 +465,36 @@ class Table {
     `;
       },
 
+      /**
+       * @returns {HTMLElement}
+       */
       getFirstRow: () => {
         return document.querySelector("tr");
       },
 
+      /**
+       * @returns {HTMLElement}
+       */
       getSecondRow: () => {
-        let secondRow = document.querySelectorAll("tr")[1];
-        return secondRow;
+        return document.querySelectorAll("tr")[1];
       },
+
+      /**
+       * @returns {HTMLElement}
+       */
       getThirdRow: () => {
-        let secondRow = document.querySelectorAll("tr")[2];
-        return secondRow;
+        return document.querySelectorAll("tr")[2];
       },
+
+      /**
+       * @returns {Node}
+       */
       cloneCell: (cell) => {
         return cell.cloneNode(true);
       },
+
       createFactorCell: () => {
-        let factorCell = this.vue.cloneCell(
+        const factorCell = this.vue.cloneCell(
           document.querySelector("td.factor[data-factorid='0']")
         );
         factorCell.dataset.factorid = this.data.lastFactorId;
@@ -423,7 +502,7 @@ class Table {
         return factorCell;
       },
       createChoiceCell: () => {
-        let choiceCell = this.vue.cloneCell(
+        const choiceCell = this.vue.cloneCell(
           document.querySelector(".choice.cell[data-choiceid='0']")
         );
 
@@ -432,7 +511,7 @@ class Table {
         return choiceCell;
       },
       createRateCell: () => {
-        let cellRate = this.vue.cloneCell(
+        const cellRate = this.vue.cloneCell(
           document.querySelector("[data-choiceid='0'][data-factorid='0']")
         );
         cellRate.innerHTML = "-";
@@ -440,7 +519,7 @@ class Table {
       },
 
       createScoreCell: () => {
-        let cellScore = this.vue.cloneCell(
+        const cellScore = this.vue.cloneCell(
           document.querySelector(".score[data-choiceid='0']")
         );
         cellScore.dataset.choiceid = this.data.lastChoiceId;
@@ -448,6 +527,10 @@ class Table {
         cellScore.firstElementChild.innerHTML = "0";
         return cellScore;
       },
+
+      /**
+       * @returns {HTMLCollection}
+       */
       createNewRow: () => {
         let newRow = this.vue.createNewDOMELement("tr", "factorRow");
         newRow.appendChild(this.vue.createFactorCell());
@@ -464,6 +547,10 @@ class Table {
 
         return newRow;
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       insertNewRow: () => {
         let tbody = document.querySelector("tbody");
         let lastRow = document.querySelectorAll("tr");
@@ -474,10 +561,13 @@ class Table {
         );
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       insertNewColumn: () => {
-        let lastTdColumn = document.getElementById("lastscorecol");
-        let addTdColumn = this.vue.getSecondRow().lastElementChild;
-        let factorRow = document.getElementsByClassName("factorRow");
+        const lastTdColumn = document.getElementById("lastscorecol");
+        const addTdColumn = this.vue.getSecondRow().lastElementChild;
+        const factorRow = document.getElementsByClassName("factorRow");
 
         this.vue
           .getFirstRow()
@@ -486,7 +576,8 @@ class Table {
           .getSecondRow()
           .insertBefore(this.vue.createChoiceCell(), addTdColumn);
 
-        for (let i = 0; i < factorRow.length; i++) {
+        const factorRowLength = factorRow.length;
+        for (let i = 0; i < factorRowLength; i++) {
           let visibleFactors = this.data.factors.filter(
             (f) => f.visible === true
           );
@@ -498,26 +589,41 @@ class Table {
         }
       },
 
+      /**
+       * @returns {VoidFunction}
+       */
       deleteRow: (row) => {
         if (document.querySelectorAll("tr.factorRow").length > 1) {
           row.parentNode.remove();
         }
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       deleteColumn: (column) => {
         if (document.querySelectorAll("td.choice").length > 1) {
-          let columns = document.querySelectorAll(
+          const columns = document.querySelectorAll(
             `td[data-choiceid='${column}']`
           );
-          for (let i = 0; i < columns.length; i++) {
+          const columnsLength = columns.length;
+          for (let i = 0; i < columnsLength; i++) {
             columns[i].remove();
           }
         }
       },
+
+      /**
+       * @returns {VoidFunction}
+       */
       updateScore: (id, score) => {
-        let cellScore = document.querySelector(`.score[data-choiceid='${id}']`);
+        const cellScore = document.querySelector(
+          `.score[data-choiceid='${id}']`
+        );
         cellScore.firstElementChild.innerHTML = score;
         cellScore.lastElementChild.value = score;
       },
+
       incrementRate: (e) => {
         let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
         if (a < 3) {
@@ -533,10 +639,13 @@ class Table {
        * @param {String} choiceContent
        */
       renderBestChoice: (choiceContent) => {
-        let resultfield = document.getElementById("best-choice");
+        const resultfield = document.getElementById("best-choice");
 
-        resultfield.innerText = `The best choice is : ${choiceContent}`;
+        const cleanChoiceContent = choiceContent.replace(/\r?\n|\r/g, "");
+
+        resultfield.innerText = `The best choice is : ${cleanChoiceContent}`;
       },
+
       /**
        * Set new HTML Element with main properties
        * @param {string} tag
@@ -546,7 +655,7 @@ class Table {
        * @param {string} factorid
        */
       createNewDOMELement: (tag = "div", classes, id, choiceid, factorid) => {
-        let newDOMELement = document.createElement(tag);
+        const newDOMELement = document.createElement(tag);
         if (classes !== undefined) {
           newDOMELement.setAttribute("class", classes);
         }
