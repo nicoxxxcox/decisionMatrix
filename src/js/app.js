@@ -114,7 +114,7 @@ class Table {
       updateFactorContent: (e) => {
         this.data.factors[
           e.target.parentNode.dataset.factorid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
 
       /**
@@ -123,7 +123,7 @@ class Table {
       updateChoiceContent: (e) => {
         this.data.choices[
           e.target.parentNode.dataset.choiceid
-        ].content = e.target.innerHTML.trim();
+        ].content = e.target.innerText.trim();
       },
 
       /**
@@ -271,7 +271,7 @@ class Table {
 
       getFactorRate: (factorId, ChoiceId) => {
         let result;
-        this.data.factors.forEach((factor) => {
+         this.data.factors.forEach((factor) => {
           factor.factorsRate.forEach((rate) => {
             if (factor.id === factorId && rate.choiceId === ChoiceId) {
               result = rate;
@@ -411,13 +411,13 @@ class Table {
     this.vue = {
       getInitTemplate: () => {
         return `
-    <table class="table table-bordered table-responsive">
+    <table class="table table-responsive">
       <tbody>
         <tr>
-          <td>#</td>
+          <td></td>
           <td class="score" data-choiceid="${this.data.choices[0].id}">
             <div class="score__content">${this.data.choices[0].score}</div>
-            
+
           </td>
           <td id="lastscorecol" class="add-col"></td>
         </tr>
@@ -641,7 +641,9 @@ class Table {
       renderBestChoice: (choiceContent) => {
         const resultfield = document.getElementById("best-choice");
 
-        resultfield.innerText = `The best choice is : ${choiceContent}`;
+        const cleanChoiceContent = choiceContent.replace(/\r?\n|\r/g, "");
+
+        resultfield.innerText = `The best choice is : ${cleanChoiceContent}`;
       },
 
       /**
