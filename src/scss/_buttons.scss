@@ -55,9 +55,8 @@
 .btn-outline__green {
   @extend .btn;
   background-color: transparent;
-  color: $gray-500;
   border: 2px solid $green-200;
-  color: $green-500;
+  color: $green-500 ;
 
   &:hover {
     text-decoration: none;

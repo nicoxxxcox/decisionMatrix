@@ -43,14 +43,12 @@ function scssTaskProd() {
 // compile uglify and replace js
 function jsTask() {
   return src(srcFolder + "js/*.js")
-    .pipe(sourcemaps.init())
-    .pipe(
-      babel({
-        presets: ["@babel/env"],
-      })
-    )
-    .pipe(uglify())
-    .pipe(sourcemaps.write("."))
+    // .pipe(
+    //   babel({
+    //     presets: ["@babel/env"],
+    //   })
+    // )
+    //.pipe(uglify())
     .pipe(dest(distFolder + "js/"))
     .pipe(browserSync.stream());
 }
