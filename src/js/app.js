@@ -36,3 +36,5 @@ class Table {
 // Main program begin here
 
 const myTable = new Table("app");
+
+myTable();
