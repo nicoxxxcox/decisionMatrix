@@ -6,194 +6,194 @@ export class Data{
 
     
         this.choicesCount = 0,
-            this.factorsCount = 0,
-            this.lastChoiceId = 0,
-            this.lastFactorId = 0,
-            this.choices = [
-                {
-                    id: 0,
-                    content: "Choix 0",
-                    score: 0,
-                    visible: true,
-                },
-            ],
-            this.factors = [
-                {
-                    id: 0,
-                    content: "Factor 0",
-                    rate: 0,
-                    visible: true,
+        this.factorsCount = 0,
+        this.lastChoiceId = 0,
+        this.lastFactorId = 0,
+        this.choices = [
+            {
+                id: 0,
+                content: "Edit here your choice",
+                score: 0,
+                visible: true,
+            },
+        ],
+        this.factors = [
+            {
+                id: 0,
+                content: "Factor 0",
+                rate: 0,
+                visible: true,
 
-                    factorsRate: [
-                        {
-                            choiceId: 0,
-                            rate: 0,
-                        },
-                    ],
-                },
-            ]
+                factorsRate: [
+                    {
+                        choiceId: 0,
+                        rate: 0,
+                    },
+                ],
+            },
+        ];
     }
         
 
-      /**
+    /**
        * @returns {Object}
        */
-      getChoice(id){
+    getChoice(id){
         return this.choices.find((choice) => choice.id === id);
-      }
+    }
 
-      /**
+    /**
        * return all choices
        * @returns {Array}
        */
-      getAllChoices(){
+    getAllChoices(){
         return this.choices;
-      }
+    }
 
-      /**
+    /**
        * @returns {Object}
        */
-      getFactor(id){
+    getFactor(id){
         return this.factors.find((factor) => factor.id == id);
-      }
+    }
 
-      /**
+    /**
        * return all factors
        * @returns {Array}
        */
-      getAllFactors(){
+    getAllFactors(){
         return this.factors;
-      }
+    }
 
-      getFactorRate(factorId, ChoiceId){
+    getFactorRate(factorId, ChoiceId){
         let result;
         this.factors.forEach((factor) => {
-          factor.factorsRate.forEach((rate) => {
-            if (factor.id === factorId && rate.choiceId === ChoiceId) {
-              result = rate;
-            }
-          });
+            factor.factorsRate.forEach((rate) => {
+                if (factor.id === factorId && rate.choiceId === ChoiceId) {
+                    result = rate;
+                }
+            });
         });
         return result;
-      }
+    }
 
-      /**
+    /**
        *  @returns {Array}
        */
-      getBestChoice(){
+    getBestChoice(){
         const high = this.choices
-          .filter((c) => c.visible === true)
-          .reduce((prev, current) =>
-            prev.score > current.score ? prev : current
-          );
+            .filter((c) => c.visible === true)
+            .reduce((prev, current) =>
+                prev.score > current.score ? prev : current
+            );
 
         return this.choices.filter((c) => c.score === high.score);
-      }
+    }
 
-      /**
+    /**
        * set a new choice
        * @param {Object} choice
        */
-      setChoice(choice){
+    setChoice(choice){
         this.choices.push(choice);
-      }
+    }
 
-      /**
+    /**
        * set a new factor
        * @param {Object} factor
        */
-      setFactor(factor){
+    setFactor(factor){
         this.factors.push(factor);
-      }
+    }
 
-      /**
+    /**
        * set new factor rate
        * @param {Object} factorRate
        *
        * TODO : just set rate if object already exist
        */
-      setFactorRate(fid, cid, rate){
+    setFactorRate(fid, cid, rate){
         this.factors.forEach((factor) => {
-          if (factor.id == fid) {
-            factor.factorsRate.push({
-              choiceId: cid,
-              rate: rate,
-            });
-          }
+            if (factor.id == fid) {
+                factor.factorsRate.push({
+                    choiceId: cid,
+                    rate: rate,
+                });
+            }
         });
-      }
+    }
 
-      setRate(fid, cid, scor){
+    setRate(fid, cid, scor){
         this.factors.forEach((factor) => {
-          if (factor.id == fid) {
-            factor.factorsRate.forEach((rate) => {
-              if (rate.choiceId == cid) {
-                rate.rate = scor;
-              }
-            });
-          }
+            if (factor.id == fid) {
+                factor.factorsRate.forEach((rate) => {
+                    if (rate.choiceId == cid) {
+                        rate.rate = scor;
+                    }
+                });
+            }
         });
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      setFactorVisible(id){
+    setFactorVisible(id){
         this.factors.forEach((factor) => {
-          if (factor.id == id && factor.visible == false) {
-            factor.visible = true;
-          }
+            if (factor.id == id && factor.visible == false) {
+                factor.visible = true;
+            }
         });
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      setFactorInvisible(id){
+    setFactorInvisible(id){
         this.factors.forEach((factor) => {
-          if (factor.id == id && factor.visible == true) {
-            factor.visible = false;
-          }
+            if (factor.id == id && factor.visible == true) {
+                factor.visible = false;
+            }
         });
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      setChoiceVisible(id){
+    setChoiceVisible(id){
         this.choices.forEach((choice) => {
-          if (choice.id == id && choice.visible == false) {
-            choice.visible = true;
-          }
+            if (choice.id == id && choice.visible == false) {
+                choice.visible = true;
+            }
         });
-      }
-      /**
+    }
+    /**
        * @returns {VoidFunction}
        */
-      setChoiceInvisible(id){
+    setChoiceInvisible(id){
         this.choices.forEach((choice) => {
-          if (choice.id == id && choice.visible == true) {
-            choice.visible = false;
-          }
+            if (choice.id == id && choice.visible == true) {
+                choice.visible = false;
+            }
         });
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      setScore(){
+    setScore(){
 
         this.choices.forEach((c) => {
-          let l = 0;
+            let l = 0;
 
-          this.factors.forEach((f) => {
-            f.factorsRate.forEach((r) => {
-              if (r.choiceId === c.id) {
-                l += r.rate;
-              }
+            this.factors.forEach((f) => {
+                f.factorsRate.forEach((r) => {
+                    if (r.choiceId === c.id) {
+                        l += r.rate;
+                    }
+                });
             });
-          });
-          c.score = l;
+            c.score = l;
         });
-      }
     }
+}

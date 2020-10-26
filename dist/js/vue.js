@@ -4,7 +4,7 @@ export class Vue{
     }
 
     
-      getInitTemplate(data){
+    getInitTemplate(data){
         return `
     <table class="table table-responsive">
       <tbody>
@@ -58,192 +58,197 @@ export class Vue{
       </tbody>
     </table>
     `;
-      }
+    }
 
-      /**
+    /**
        * @returns {HTMLElement}
        */
-      getFirstRow(){
+    getFirstRow(){
         return document.querySelector("tr");
-      }
+    }
 
-      /**
+    /**
        * @returns {HTMLElement}
        */
-      getSecondRow (){
+    getSecondRow (){
         return document.querySelectorAll("tr")[1];
-      }
+    }
 
-      /**
+    /**
        * @returns {HTMLElement}
        */
-      getThirdRow(){
+    getThirdRow(){
         return document.querySelectorAll("tr")[2];
-      }
+    }
 
-      /**
+    /**
        * @returns {Node}
        */
-      cloneCell(cell){
+    cloneCell(cell){
         return cell.cloneNode(true);
-      }
+    }
 
-      createFactorCell(data){
+    createFactorCell(data){
         const factorCell = this.cloneCell(
-          document.querySelector("td.factor[data-factorid='0']")
+            document.querySelector("td.factor[data-factorid='0']")
         );
         factorCell.dataset.factorid = data.lastFactorId;
         factorCell.firstElementChild.innerHTML = `Facteur ${data.lastFactorId}`;
         return factorCell;
-      }
+    }
     
-      createChoiceCell(data){
+    createChoiceCell(data){
         const choiceCell = this.cloneCell(
-          document.querySelector(".choice.cell[data-choiceid='0']")
+            document.querySelector(".choice.cell[data-choiceid='0']")
         );
 
         choiceCell.dataset.choiceid = data.lastChoiceId;
         choiceCell.firstElementChild.innerHTML = `Choix ${data.lastChoiceId}`;
         return choiceCell;
-      }
+    }
     
-      createRateCell(){
+    createRateCell(){
         const cellRate = this.cloneCell(
-          document.querySelector("[data-choiceid='0'][data-factorid='0']")
+            document.querySelector("[data-choiceid='0'][data-factorid='0']")
         );
         cellRate.innerHTML = "-";
         return cellRate;
-      }
+    }
 
-      createScoreCell(data){
+    createScoreCell(data){
         const cellScore = this.cloneCell(
-          document.querySelector(".score[data-choiceid='0']")
+            document.querySelector(".score[data-choiceid='0']")
         );
         cellScore.dataset.choiceid = data.lastChoiceId;
 
         cellScore.firstElementChild.innerHTML = "0";
         return cellScore;
-      }
+    }
 
-      /**
+    /**
        * @returns {HTMLCollection}
        */
-      createNewRow(data){
+    createNewRow(data){
         let newRow = this.createNewDOMELement("tr", "factorRow");
         newRow.appendChild(this.createFactorCell(data));
 
         // TODO fix the count of choices
         data.choices
-          .filter((c) => c.visible === true)
-          .forEach((choice) => {
-            let cell = this.createRateCell();
-            cell.dataset.choiceid = choice.id;
-            cell.dataset.factorid = data.lastFactorId;
-            newRow.appendChild(cell);
-          });
+            .filter((c) => c.visible === true)
+            .forEach((choice) => {
+                let cell = this.createRateCell();
+                cell.dataset.choiceid = choice.id;
+                cell.dataset.factorid = data.lastFactorId;
+                newRow.appendChild(cell);
+            });
 
         return newRow;
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      insertNewRow(data){
+    insertNewRow(data){
         let tbody = document.querySelector("tbody");
         let lastRow = document.querySelectorAll("tr");
 
         tbody.insertBefore(
-          this.createNewRow(data),
-          lastRow[lastRow.length - 1]
+            this.createNewRow(data),
+            lastRow[lastRow.length - 1]
         );
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      insertNewColumn(data){
+    insertNewColumn(data){
         const lastTdColumn = document.getElementById("lastscorecol");
         const addTdColumn = this.getSecondRow().lastElementChild;
         const factorRow = document.getElementsByClassName("factorRow");
 
         this
-          .getFirstRow()
-          .insertBefore(this.createScoreCell(data), lastTdColumn);
+            .getFirstRow()
+            .insertBefore(this.createScoreCell(data), lastTdColumn);
         this
-          .getSecondRow()
-          .insertBefore(this.createChoiceCell(data), addTdColumn);
+            .getSecondRow()
+            .insertBefore(this.createChoiceCell(data), addTdColumn);
 
         const factorRowLength = factorRow.length;
         for (let i = 0; i < factorRowLength; i++) {
-          let visibleFactors = data.factors.filter(
-            (f) => f.visible === true
-          );
+            let visibleFactors = data.factors.filter(
+                (f) => f.visible === true
+            );
 
-          let cell = this.createRateCell();
-          cell.dataset.choiceid = data.lastChoiceId;
-          cell.dataset.factorid = visibleFactors[i].id;
-          factorRow[i].appendChild(cell);
+            let cell = this.createRateCell();
+            cell.dataset.choiceid = data.lastChoiceId;
+            cell.dataset.factorid = visibleFactors[i].id;
+            factorRow[i].appendChild(cell);
         }
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      deleteRow(row){
+    deleteRow(row){
         if (document.querySelectorAll("tr.factorRow").length > 1) {
-          row.parentNode.remove();
+            row.parentNode.remove();
         }
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      deleteColumn(column){
+    deleteColumn(column){
         if (document.querySelectorAll("td.choice").length > 1) {
-          const columns = document.querySelectorAll(
-            `td[data-choiceid='${column}']`
-          );
-          const columnsLength = columns.length;
-          for (let i = 0; i < columnsLength; i++) {
-            columns[i].remove();
-          }
+            const columns = document.querySelectorAll(
+                `td[data-choiceid='${column}']`
+            );
+            const columnsLength = columns.length;
+            for (let i = 0; i < columnsLength; i++) {
+                columns[i].remove();
+            }
         }
-      }
+    }
 
-      /**
+    /**
        * @returns {VoidFunction}
        */
-      updateScore(id, score){
+    updateScore(id, score){
         const cellScore = document.querySelector(
-          `.score[data-choiceid='${id}']`
+            `.score[data-choiceid='${id}']`
         );
         cellScore.firstElementChild.innerHTML = score;
         cellScore.lastElementChild.value = score;
-      }
+    }
 
-      incrementRate(e){
+    incrementRate(e){
         let a = isNaN(e.target.textContent) ? 0 : e.target.textContent;
         if (a < 3) {
-          a++;
+            a++;
         } else {
-          a = 0;
+            a = 0;
         }
         e.target.innerHTML = a;
         return a;
-      }
+    }
 
-      /**
+    setFocus(el) {
+        el.focus();
+         window.getSelection().selectAllChildren(el);
+    }
+
+    /**
        * @param {String} choiceContent
        */
-      renderBestChoice(choiceContent){
+    renderBestChoice(choiceContent){
         const resultfield = document.getElementById("best-choice");
 
         const cleanChoiceContent = choiceContent.replace(/\r?\n|\r/g, "");
 
         resultfield.innerText = `The best choice is : ${cleanChoiceContent}`;
-      }
+    }
 
-      /**
+    /**
        * Set new HTML Element with main properties
        * @param {string} tag
        * @param {string} classes
@@ -251,22 +256,22 @@ export class Vue{
        * @param {string} choiceid
        * @param {string} factorid
        */
-      createNewDOMELement(tag = "div", classes, id, choiceid, factorid){
+    createNewDOMELement(tag = "div", classes, id, choiceid, factorid){
         const newDOMELement = document.createElement(tag);
         if (classes !== undefined) {
-          newDOMELement.setAttribute("class", classes);
+            newDOMELement.setAttribute("class", classes);
         }
         if (id !== undefined) {
-          newDOMELement.setAttribute("id", id);
+            newDOMELement.setAttribute("id", id);
         }
         if (choiceid !== undefined) {
-          newDOMELement.dataset.choiceid = choiceid;
+            newDOMELement.dataset.choiceid = choiceid;
         }
         if (factorid !== undefined) {
-          newDOMELement.dataset.factorid = factorid;
+            newDOMELement.dataset.factorid = factorid;
         }
 
         return newDOMELement;
-      }
+    }
     
 }
