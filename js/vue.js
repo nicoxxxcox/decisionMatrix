@@ -232,6 +232,11 @@ export class Vue{
         return a;
     }
 
+    setFocus(el) {
+        el.focus();
+         window.getSelection().selectAllChildren(el);
+    }
+
     /**
        * @param {String} choiceContent
        */
