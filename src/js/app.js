@@ -24,7 +24,8 @@ class Table {
 
         this.controler = new Controler(this.wrapper);
         this.controler.initRender(this.wrapper);
-    
+        
+        
 
         this.controler.listenClickEvents(this.wrapper);
     }

@@ -12,7 +12,7 @@ export class Data{
         this.choices = [
             {
                 id: 0,
-                content: "first choice",
+                content: "Edit here your choice",
                 score: 0,
                 visible: true,
             },
