@@ -103,6 +103,23 @@ body {
   white-space: nowrap;
 }
 
+.title{
+  margin-bottom:  2rem;
+  color: $yellow-500;
+}
+
+.result-content{
+  color: $green-500;
+}
+
+.p{
+  font-size: 1rem;
+}
+
+.__muted{
+  color: $gray-700;
+}
+
 /*-------------
 -- TABLE
 ---------------*/
