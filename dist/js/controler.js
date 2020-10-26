@@ -9,20 +9,24 @@ export class Controler {
     this.data = new Data();
   }
 
-  /**
-   * Return and increment an item id
-   * @returns {Number}
-   */
-  incrementItemID(item) {
-    return item++;
-  }
+
+
+      /**
+       * Return and increment a new choice id
+       * @returns {Number}
+       */
+    incrementLastChoiceId(){
+        return this.data.lastChoiceId++;
+    }
 
     /**
-   * @returns {Number}
-   */
-  countItems(items) {
-    return items.filter((f) => f.visible === true).length;
-  }
+       * Return and increment a new factor id
+       * @returns {Number}
+       */
+    incrementLastFactorId(){
+        return this.data.lastFactorId++;
+    }
+
 
   /**
    * @returns {Number}
@@ -42,7 +46,7 @@ export class Controler {
    * @returns {VoidFunction}
    */
   addFactor() {
-    this.incrementItemID(this.data.lastFactorId);
+    this.incrementLastChoiceId();
 
     this.data.setFactor({
       id: this.data.lastFactorId,
@@ -65,7 +69,7 @@ export class Controler {
    * @returns {VoidFunction}
    */
   addChoice() {
-    this.incrementItemID(this.lastChoiceId);
+    this.incrementLastChoiceId();
 
     this.data.setChoice({
       id: this.data.lastChoiceId,
