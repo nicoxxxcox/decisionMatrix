@@ -47,7 +47,7 @@ export class Controler {
    * @returns {VoidFunction}
    */
   addFactor() {
-    this.incrementLastChoiceId();
+    this.incrementLastFactorId();
 
     this.data.setFactor({
       id: this.data.lastFactorId,
