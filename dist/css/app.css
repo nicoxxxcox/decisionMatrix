@@ -72,7 +72,8 @@ a {
 abbr[title] {
   text-decoration: underline;
   /* 2 */
-  text-decoration: underline dotted;
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
   /* 2 */
   border-bottom: none;
   /* 1 */ }
@@ -602,7 +603,10 @@ template {
   text-decoration: none;
   vertical-align: middle;
   cursor: pointer;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background-color: #cbd5e0;
   border: 2px solid #cbd5e0;
   color: #2d3748;
@@ -872,5 +876,4 @@ tbody tr:last-child td {
     content: "";
     border-radius: 50px;
     background-color: #c6f6d5; }
-
 /*# sourceMappingURL=app.css.map */

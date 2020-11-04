@@ -1,13 +1,11 @@
-const { src, dest, watch, series, parallel, lastRun } = require("gulp");
-
-const sourcemaps = require("gulp-sourcemaps");
+const { src, dest, watch, series, parallel } = require("gulp");
 const sass = require("gulp-sass");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
-const cssnano = require("cssnano");
 const browserSync = require("browser-sync").create();
-//const uglify = require("gulp-uglify");
-//const babel = require("gulp-babel");
+const del = require('del');
+const uglify = require("gulp-uglify");
+const babel = require("gulp-babel");
 
 //====== What's the folder to watch and reload ?
 
@@ -21,43 +19,35 @@ const distFolder = "dist/";
 
 //Compile, prefix and minifify scss
 function scssTask() {
-    return src(srcFolder + "scss/*.scss", { sourcemaps: true })
-        .pipe(sourcemaps.init())
+    return src(srcFolder + "scss/*.scss", { outputStyle: "compressed", sourcemaps: true })
         .pipe(sass())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest(distFolder + "css/"))
-        .pipe(browserSync.stream());
-}
-
-//Compile, prefix and minifify scss for production
-function scssTaskProd() {
-    return src(srcFolder + "scss/*.scss", { sourcemaps: true })
-        .pipe(sourcemaps.init())
-        .pipe(sass())
-        .pipe(postcss([autoprefixer(), cssnano]))
-        .pipe(sourcemaps.write("."))
-        .pipe(dest(distFolder + "css/"))
+        .pipe(postcss([
+            autoprefixer()
+        ]))
+        .pipe(dest(distFolder + "css/", { sourcemaps: '.' }))
         .pipe(browserSync.stream());
 }
 
 // compile uglify and replace js
 function jsTask() {
     return src(srcFolder + "js/*.js")
-    // .pipe(
-    //   babel({
-    //     presets: ["@babel/env"],
-    //   })
-    // )
-    //.pipe(uglify())
+        //.pipe(uglify())
         .pipe(dest(distFolder + "js/"))
         .pipe(browserSync.stream());
 }
 
-// replace html
+// delete dist folder
+function cleanDist(done) {
+    del.sync('dist');
+    return done();
+}
+
+// move html files
 function htmlTask() {
     return src(srcFolder + "*.html").pipe(dest(distFolder));
 }
 
+// watch src files
 function watchTask() {
     browserSync.init({
         server: {
@@ -65,22 +55,11 @@ function watchTask() {
         },
     });
     watch(
-        [srcFolder + "scss/*.scss", srcFolder + "*.html", srcFolder + "js/*.js"],
-        series(htmlTask, scssTask, jsTask)
+        [srcFolder + "scss/*.scss", srcFolder + "*.html", srcFolder + "js/*.js"], { ignoreInitial: false },
+        series(parallel(htmlTask, scssTask, jsTask)) ,
     ).on("change", browserSync.reload);
 }
 
-function watchTaskProduction() {
-    browserSync.init({
-        server: {
-            baseDir: distFolder,
-        },
-    });
-    watch(
-        ["*.scss", "*.html", "*.js"],
-        series(parallel(scssTaskProd, jsTask), htmlTask)
-    ).on("change", browserSync.reload);
-}
 
 exports.default = watchTask;
-exports.production = watchTaskProduction;
+exports.clean = cleanDist;
