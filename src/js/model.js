@@ -1,7 +1,5 @@
 export class Data {
   constructor () {
-    this.choicesCount = 0
-    this.factorsCount = 0
     this.lastChoiceId = 0
     this.lastFactorId = 0
     this.choices = [
