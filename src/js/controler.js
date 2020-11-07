@@ -25,20 +25,6 @@ export class Controler {
   }
 
   /**
-   * @returns {Number}
-   */
-  countFactors () {
-    return this.data.factors.filter((f) => f.visible === true).length
-  }
-
-  /**
-   * @returns {Number}
-   */
-  countChoices () {
-    return this.data.choices.filter((c) => c.visible === true).length
-  }
-
-  /**
    * @returns {VoidFunction}
    */
   addFactor () {
@@ -198,6 +184,8 @@ export class Controler {
             }
           })
         }
+
+        console.log(this)
       },
       true
     )
