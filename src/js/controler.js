@@ -103,6 +103,29 @@ export class Controler {
   }
 
   /**
+   *
+   * @param {String} typeOfElement
+   * @param {HTMLElement} e
+   * @returns {VoidFunction}
+   */
+  updateElementContent (typeOfElement, e) {
+    switch (typeOfElement) {
+      case 'factor':
+        console.log(e)
+        this.data.factors[
+          e.target.parentNode.dataset.factorid
+        ].content = e.target.innerText.trim()
+        break
+      case 'choice':
+        console.log(e)
+        this.data.choices[
+          e.target.parentNode.dataset.choiceid
+        ].content = e.target.innerText.trim()
+        break
+    }
+  }
+
+  /**
    * @returns {VoidFunction}
    */
   updateFactorContent (e) {
@@ -187,10 +210,10 @@ export class Controler {
         ) {
           e.target.addEventListener('input', () => {
             if (e.target.parentNode.dataset.factorid) {
-              this.updateFactorContent(e)
+              this.updateElementContent('factor', e)
               this.updateBestChoice()
             } else if (e.target.parentNode.dataset.choiceid) {
-              this.updateChoiceContent(e)
+              this.updateElementContent('choice', e)
               this.updateBestChoice()
             }
           })
