@@ -56,7 +56,7 @@ function watchTask () {
   })
   watch(
     [srcFolder + 'scss/*.scss', srcFolder + '*.html', srcFolder + 'js/*.js'], { ignoreInitial: false },
-    series(parallel(htmlTask, scssTask, jsTask))
+    series(parallel(scssTask, jsTask), htmlTask)
   ).on('change', browserSync.reload)
 }
 
