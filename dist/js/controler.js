@@ -3,7 +3,6 @@ import { Data } from './model.js'
 
 export class Controler {
   constructor (wrapper) {
-    console.log('hello controler')
     this.wrapper = wrapper
     this.vue = new Vue()
     this.data = new Data()
@@ -85,20 +84,22 @@ export class Controler {
   }
 
   /**
+   *
+   * @param {String} typeOfElement
+   * @param {HTMLElement} el
    * @returns {VoidFunction}
    */
-  deleteFactor (el) {
-    this.data.setFactorInvisible(el.dataset.factorid)
-    this.vue.deleteRow(el)
-  }
-
-  /**
-   * @returns {VoidFunction}
-   */
-  deleteChoice (el) {
-    this.data.setChoiceInvisible(el.dataset.choiceid)
-
-    this.vue.deleteColumn(el.dataset.choiceid)
+  deleteElement (typeOfElement, el) {
+    switch (typeOfElement) {
+      case 'factor':
+        this.data.setFactorInvisible(el.dataset.factorid)
+        this.vue.deleteRow(el)
+        break
+      case 'choice':
+        this.data.setChoiceInvisible(el.dataset.choiceid)
+        this.vue.deleteColumn(el.dataset.choiceid)
+        break
+    }
   }
 
   /**
@@ -157,7 +158,6 @@ export class Controler {
   initRender (wrapper) {
     wrapper.innerHTML = this.vue.getInitTemplate(this.data)
     this.vue.setFocus(document.querySelector('.choice-content'))
-    console.log(document.activeElement)
   }
 
   /**
@@ -178,9 +178,9 @@ export class Controler {
         } else if (e.target === document.getElementById('addFactor-btn')) {
           this.addFactor()
         } else if (e.target.classList.contains('factor-btn__del')) {
-          this.deleteFactor(e.target.parentNode)
+          this.deleteElement('factor', e.target.parentNode)
         } else if (e.target.classList.contains('choice-btn__del')) {
-          this.deleteChoice(e.target.parentNode)
+          this.deleteElement('choice', e.target.parentNode)
         } else if (
           e.target.classList.contains('factor-content') ||
           e.target.classList.contains('choice-content')
