@@ -1,7 +1,5 @@
 export class Data {
   constructor () {
-    console.log('hello data')
-
     this.choicesCount = 0
     this.factorsCount = 0
     this.lastChoiceId = 0

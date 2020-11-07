@@ -1,8 +1,4 @@
 export class Vue {
-  constructor () {
-    console.log('hello vue')
-  }
-
   getInitTemplate (data) {
     return `
     <table class="table table-responsive">
