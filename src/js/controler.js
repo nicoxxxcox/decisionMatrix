@@ -3,7 +3,6 @@ import { Data } from './model.js'
 
 export class Controler {
   constructor (wrapper) {
-    console.log('hello controler')
     this.wrapper = wrapper
     this.vue = new Vue()
     this.data = new Data()
@@ -157,7 +156,6 @@ export class Controler {
   initRender (wrapper) {
     wrapper.innerHTML = this.vue.getInitTemplate(this.data)
     this.vue.setFocus(document.querySelector('.choice-content'))
-    console.log(document.activeElement)
   }
 
   /**
