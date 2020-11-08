@@ -7,4 +7,4 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 },{"./vue.js":"C36W","./model.js":"kRZE"}],"QdeU":[function(require,module,exports) {
 "use strict";var e=require("./controler.js");function t(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function n(e,t){for(var n=0;n<t.length;n++){var r=t[n];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function r(e,t,r){return t&&n(e.prototype,t),r&&n(e,r),e}var i=function(){function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"app";t(this,n),"string"!=typeof e?(this.el="app",console.log("the app will build in #app div")):this.el=e,this.main()}return r(n,[{key:"main",value:function(){this.wrapper=document.getElementById(this.el),this.controler=new e.Controler(this.wrapper),this.controler.initRender(this.wrapper),this.controler.listenClickEvents(this.wrapper)}}]),n}(),o=new i("app");
 },{"./controler.js":"r54C"}]},{},["QdeU"], null)
-//# sourceMappingURL=/app.d9a62cbe.js.map
+//# sourceMappingURL=app.d9a62cbe.js.map
