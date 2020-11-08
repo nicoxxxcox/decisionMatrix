@@ -78,11 +78,11 @@ export class Controler {
   deleteElement (typeOfElement, el) {
     switch (typeOfElement) {
       case 'factor':
-        this.data.setFactorInvisible(el.dataset.factorid)
+        this.data.setFactorInvisible(parseInt(el.dataset.factorid))
         this.vue.deleteRow(el)
         break
       case 'choice':
-        this.data.setChoiceInvisible(el.dataset.choiceid)
+        this.data.setChoiceInvisible(parseInt(el.dataset.choiceid))
         this.vue.deleteColumn(el.dataset.choiceid)
         break
     }
@@ -113,16 +113,18 @@ export class Controler {
    * @returns {VoidFunction}
    */
   updateScore (e) {
+    const factorIdFromTarget = parseInt(e.target.dataset.factorid)
+    const ChoiceIdFromTarget = parseInt(e.target.dataset.choiceid)
     this.data.setRate(
-      e.target.dataset.factorid,
-      e.target.dataset.choiceid,
+      factorIdFromTarget,
+      ChoiceIdFromTarget,
       this.vue.incrementRate(e)
     )
     this.data.setScore()
 
     this.data.choices.forEach((c) => {
-      if (c.id === e.target.dataset.choiceid) {
-        this.vue.updateScore(e.target.dataset.choiceid, c.score)
+      if (c.id === ChoiceIdFromTarget) {
+        this.vue.updateScore(ChoiceIdFromTarget, c.score)
       }
     })
   }
@@ -184,8 +186,6 @@ export class Controler {
             }
           })
         }
-
-        console.log(this)
       },
       true
     )
