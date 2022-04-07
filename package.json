@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "source": "src/index.html",
+<<<<<<< HEAD
+=======
+  "main": "app.js",
+>>>>>>> f63c1be7baaa1534c50825c302beeb26db8accd7
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicoxxxcox/decisionMatrix.git"
